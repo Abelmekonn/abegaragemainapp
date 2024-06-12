@@ -1,5 +1,10 @@
 import React from 'react';
 
+// import image
+import logo from '../../../assets/images/logo.png'
+import iconBar from '../../../assets/images/icons/icon-bar.png'
+import logo_two from '../../../assets/images/logo-two.png'
+
 function Header() {
     return (
         <div>
@@ -24,13 +29,13 @@ function Header() {
                         <div className="inner-container">
                             <div className="logo-box">
                                 <div className="logo">
-                                    <a href="/"><img src="assets/images/custom/logo.png" alt="Company Logo" /></a>
+                                    <a href="/"><img src={logo} alt="Company Logo" /></a>
                                 </div>
                             </div>
                             <div className="right-column">
                                 <div className="nav-outer">
                                     <div className="mobile-nav-toggler">
-                                        <img src="assets/images/icons/icon-bar.png" alt="Menu Icon" />
+                                        <img src={iconBar} alt="Menu Icon" />
                                     </div>
                                     <nav className="main-menu navbar-expand-md navbar-light">
                                         <div className="collapse navbar-collapse show clearfix" id="navbarSupportedContent">
@@ -55,13 +60,13 @@ function Header() {
                             <div className="inner-container">
                                 <div className="logo-box">
                                     <div className="logo">
-                                        <a href="/"><img src="assets/images/custom/logo.png" alt="Company Logo" /></a>
+                                        <a href="/"><img src={logo} alt="Company Logo" /></a>
                                     </div>
                                 </div>
                                 <div className="right-column">
                                     <div className="nav-outer">
                                         <div className="mobile-nav-toggler">
-                                            <img src="assets/images/icons/icon-bar.png" alt="Menu Icon" />
+                                            <img src={iconBar} alt="Menu Icon" />
                                         </div>
                                         <nav className="main-menu navbar-expand-md navbar-light">
                                             {/* Empty nav can be filled as needed */}
@@ -78,7 +83,7 @@ function Header() {
                     <div className="menu-backdrop"></div>
                     <div className="close-btn"><span className="icon flaticon-remove"></span></div>
                     <nav className="menu-box">
-                        <div className="nav-logo"><a href="/"><img src="assets/images/logo-two.png" alt="Mobile Logo" /></a></div>
+                        <div className="nav-logo"><a href="/"><img src={logo_two} alt="Mobile Logo" /></a></div>
                         <div className="menu-outer">
                             {/* Mobile menu items can be added here */}
                         </div>
