@@ -1,0 +1,26 @@
+.admin-pages{
+    background-color: #F6F7FA;
+}
+.admin-menu{
+    display: flex;
+    flex-direction: column;
+    background-color: #232B48 !important;
+    border: none;
+    height: 100%;
+}
+.admin-menu-title{
+    background-color: #1E2331 !important;
+    width: 100%;
+    padding: 5px 0px;
+}
+.admin-menu-title h2{
+    color: white;
+    margin-left: 20px;
+}
+.list-group-item {
+    background-color: #232B48 !important;
+    width: 100%;
+    margin-bottom: 3px;
+    color: white !important;
+    border-bottom: 0.5px solid rgb(221, 218, 218) !important; /* Ensure it overrides other styles */
+}

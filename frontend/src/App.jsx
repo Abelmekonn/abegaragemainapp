@@ -10,6 +10,7 @@ import './assets/template_asset/css/responsive.css'
 
 // import custom css
 import './assets/style/custom.css'
+
 // import Header and footer
 import Footer from './markup/components/Footer/Footer'
 import Header from './markup/components/Header/Header'

@@ -66,9 +66,7 @@ function Footer() {
                 {/* Footer Column */}
                 <div className="footer-column col-lg-4">
                   <div className="widget widget_about">
-                    <div className="logo">
-                      <a href="/"><img src={logo_two} alt="Company Logo" /></a>
-                    </div>
+                    
                     <div className="text">
                       Capitalize on low hanging fruit to identify a ballpark value added
                       activity to beta test. Override the digital divide additional clickthroughs.
