@@ -20,7 +20,6 @@ async function createEmployee(req,res,next){
             }else{
                 res.status(200).json({
                     message:"Employee created successfully",
-                    data:employee
                 })
             }
         } catch (error) {
@@ -30,4 +29,8 @@ async function createEmployee(req,res,next){
             })
         }
     }
+}
+
+module.exports={
+    createEmployee
 }
