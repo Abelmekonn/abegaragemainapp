@@ -4,3 +4,5 @@ const router = express.Router();
 const installController = require("../controllers/install.controller");
 // create route to handel
 router.post("/install", installController.install);
+
+module.exports=router;

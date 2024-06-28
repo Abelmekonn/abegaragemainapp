@@ -1,25 +1,26 @@
-const mysql2 = require("mysql2");
+const mysql = require('mysql2/promise');
 
-// Create a connection pool
-const dbConnectionPool = mysql2.createPool({
-    user: process.env.DB_USER,
-    database: process.env.DB_NAME,
-    host: process.env.DB_HOST,
-    connectionLimit: 10
+const dbConnectionPool = mysql.createPool({
+    host: process.env.DB_HOST ,
+    user: process.env.DB_USER ,
+    password: process.env.DB_PASSWORD ,
+    database: process.env.DB_NAME ,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
 });
 
-// Create a promise for the pool
-const dbConnectionPromise = dbConnectionPool.promise();
-
-console.log(process.env.DB_NAME);
-
 async function query(sql, params) {
-    const [rows, fields] = await dbConnectionPromise.execute(sql, params);
-    return rows;
+    try {
+        const [results] = await dbConnectionPool.execute(sql, params);
+        return results;
+    } catch (error) {
+        console.error('Database query error:', error);
+        throw error;
+    }
 }
 
 module.exports = {
     dbConnectionPool,
-    dbConnectionPromise,
     query
 };
