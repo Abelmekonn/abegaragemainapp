@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import Home from '../src/markup/pages/Home'
 import Login from './markup/pages/Login'
 import AddEmployee from './markup/pages/admin/AddEmployee'

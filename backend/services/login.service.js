@@ -3,7 +3,7 @@ const employeeService = require("./employee.service");
 
 async function logIn(employeeData) {
     try {
-        console.log('Employee data:', employeeData);
+        
         if (!employeeData.email || !employeeData.password) {
             return {
                 status: "fail",
@@ -11,10 +11,8 @@ async function logIn(employeeData) {
             };
         }
 
-        let returnData = {};
         const employee = await employeeService.getEmployeeByEmail(employeeData.email);
-
-        if (!employee || employee.length === 0) {
+        if (employee.length === 0) {
             return {
                 status: "fail",
                 message: "Employee does not exist"

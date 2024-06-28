@@ -30,8 +30,13 @@ async function logIn(req, res, next) {
             employee_role: employee.data.company_role_id,
             employee_first_name: employee.data.employee_first_name,
         };
-        const token = jwt.sign(payload, jwtSecret, { expiresIn: "24h" });
-        const sendBack = { employee_token: token };
+        const token = jwt.sign(payload, jwtSecret, {
+            expiresIn: "24h",
+        });
+
+        const sendBack = {
+            employee_token: token,
+        };
 
         return res.status(200).json({
             status: "success",
