@@ -7,11 +7,27 @@ const LogIn = async (formData) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
     };
-    console.log("About to send request");
-    console.log(requestOptions.body);
-    const response = await fetch(`${api_url}/api/employee/login`, requestOptions);
-    return response;
-}
 
-// Export the functions 
+    console.log('API URL:', api_url);
+    console.log('Request Options:', requestOptions);
+
+    try {
+        const response = await fetch(`${api_url}/api/employee/login`, requestOptions);
+        const responseData = await response.json();
+
+        console.log('Response Status:', response.status);
+        console.log('Response Data:', responseData);
+
+        if (!response.ok) {
+            console.error('Response Error:', responseData);
+            throw new Error(responseData.message || 'Login request failed');
+        }
+
+        return responseData;
+    } catch (error) {
+        console.error('Fetch Error:', error);
+        throw error;
+    }
+};
+
 export default LogIn;

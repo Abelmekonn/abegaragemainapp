@@ -66,12 +66,14 @@ function AddEmployeeForm() {
 
         try {
             const response = await employeeService.createEmployee(formData);
-            const data = await response.json();
-
-            if (data.error) {
-                setServerError(data.error);
+            // console.log('Response:', response); // Check response object
+            
+            // Assuming response is already JSON parsed due to service implementation
+            
+            if (response.error) {
+                setServerError(response.error);
             } else {
-                setServerError('');
+                setServerError(''); // Clear server error state on success
                 // Optionally handle success state or redirection
                 setTimeout(() => {
                     window.location.href = '/';
