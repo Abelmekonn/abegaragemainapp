@@ -9,7 +9,6 @@ function AddEmployeeForm() {
     const [employee_password, setPassword] = useState('');
     const [active_employee] = useState(1); // Assuming this is a constant
     const [company_role_id, setCompany_role_id] = useState(1); // Assuming this is a default value
-
     const [emailError, setEmailError] = useState('');
     const [firstNameRequired, setFirstNameRequired] = useState('');
     const [passwordError, setPasswordError] = useState('');

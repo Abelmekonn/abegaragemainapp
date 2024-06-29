@@ -30,4 +30,9 @@ const LogIn = async (formData) => {
     }
 };
 
-export default LogIn;
+const LogOut = () => {
+    localStorage.removeItem("employee");
+};
+
+// Export the functions 
+export { LogIn, LogOut };

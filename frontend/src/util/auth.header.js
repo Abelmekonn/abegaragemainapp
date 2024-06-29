@@ -1,10 +1,8 @@
-const employeeAuthHeader = async () => {
-  // console.log("Inside employeeAuthHeader");
+// Function to read the data from the user's local storage  
+const getAuth = async () => {
   const employee = await JSON.parse(localStorage.getItem('employee'));
   if (employee && employee.employee_token) {
-    console.log("Inside employeeAuthHeader if statement");
     const decodedToken = await decodeTokenPayload(employee.employee_token);
-    console.log(decodedToken);
     employee.employee_role = decodedToken.employee_role;
     employee.employee_id = decodedToken.employee_id;
     employee.employee_first_name = decodedToken.employee_first_name;
@@ -12,7 +10,7 @@ const employeeAuthHeader = async () => {
   } else {
     return {};
   }
-}
+};
 
 // Function to decode the payload from the token
 // The purpose of this code is to take a JWT token, extract its payload, decode it from Base64Url encoding, and then convert the decoded payload into a JavaScript object for further use and manipulation
@@ -28,4 +26,4 @@ const decodeTokenPayload = (token) => {
   return JSON.parse(jsonPayload);
 };
 
-export default employeeAuthHeader;
+export default getAuth;
