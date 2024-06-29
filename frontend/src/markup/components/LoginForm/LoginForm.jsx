@@ -13,7 +13,7 @@ function LoginForm() {
     const [serverError, setServerError] = useState('');
 
     const handleSubmit = async (event) => {
-        event.preventDefault();
+        event.preventDefault();s
 
         // Client-side validation
         let valid = true;
