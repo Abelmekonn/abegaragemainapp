@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import employeeService from '../../../../services/employee.service';
+import { useAuth } from '../../../../contexts/AuthContext';
 
 function AddEmployeeForm() {
     const [employee_email, setEmail] = useState('');
@@ -13,6 +14,13 @@ function AddEmployeeForm() {
     const [firstNameRequired, setFirstNameRequired] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [serverError, setServerError] = useState('');
+
+    let loggedInEmployeeToken='';
+    const {employee}= useAuth();
+    if(employee && employee.employee_token){
+        // eslint-disable-next-line no-const-assign
+        loggedInEmployeeToken=employee.employee_token;
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -64,7 +72,7 @@ function AddEmployeeForm() {
         };
 
         try {
-            const response = await employeeService.createEmployee(formData);
+            const response = await employeeService.createEmployee(formData,loggedInEmployeeToken);
             // console.log('Response:', response); // Check response object
             
             // Assuming response is already JSON parsed due to service implementation

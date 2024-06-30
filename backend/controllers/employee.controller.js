@@ -4,6 +4,7 @@ const employeeService = require('../services/employee.service');
 async function createEmployee(req, res, next) {
     // Check if employee email already exists in the database 
     const employeeExists = await employeeService.checkIfEmployeeExists(req.body.employee_email);
+    
     // If employee exists, send a response to the client
     if (employeeExists) {
         res.status(400).json({

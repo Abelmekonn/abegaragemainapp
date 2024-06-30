@@ -1,23 +1,54 @@
-const { StatusCodes } = require("http-status-codes");
+// Import the dotenv package
+require('dotenv').config();
+// Import the jsonwebtoken package
 const jwt = require("jsonwebtoken");
+// A function to verify the token received from the frontend 
+// Import the employee service 
+const employeeService = require("../services/employee.service");
 
-function authMiddleware(req, res, next) {
-    const authHeader = req.header('Authorization');
-    
-    if (!authHeader || !authHeader.startsWith("Bearer")) {
-        return res.status(StatusCodes.UNAUTHORIZED).json({ error: 'Authentication invalid' });
+// A function to verify the token received from the frontend 
+const verifyToken = async (req, res, next) => {
+    let token = req.headers["x-access-token"];
+    if (!token) {
+        return res.status(403).send({
+            status: "fail",
+            message: "No token provided!"
+        });
     }
-    
-    const token = authHeader.split(" ")[1];
 
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-        req.user = decoded; // Assuming your JWT contains user information
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+        if (err) {
+            return res.status(401).send({
+                status: "fail",
+                message: "Unauthorized!"
+            });
+        }
+        // console.log("Here is the decoded token");
+        // console.log(decoded);
+        req.employee_email = decoded.employee_email;
         next();
-    } catch (error) {
-        console.error("JWT verification error:", error);
-        return res.status(StatusCodes.UNAUTHORIZED).json({ msg: "Unauthorized user" });
+    });
+}
+
+// A function to check if the user is an admin
+const isAdmin = async (req, res, next) => {
+    // let token = req.headers["x-access-token"];
+    console.log(req.employee_email);
+    const employee_email = req.employee_email;
+    const employee = await employeeService.getEmployeeByEmail(employee_email);
+    if (employee[0].company_role_id === 3) {
+        next();
+    } else {
+        return res.status(403).send({
+            status: "fail",
+            error: "Not an Admin!"
+        });
     }
+}
+
+const authMiddleware = {
+    verifyToken,
+    isAdmin
 }
 
 module.exports = authMiddleware;

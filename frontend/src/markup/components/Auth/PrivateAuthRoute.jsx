@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Navigate } from "react-router";
-import getAuth from '../../../util/auth';
+import getAuth from "../../../util/auth.header"
 
 const PrivateAuthRoute = ({ roles, children }) => {
     const [isChecked, setIsChecked] = useState(false);
@@ -14,6 +14,7 @@ const PrivateAuthRoute = ({ roles, children }) => {
                 const response = await getAuth();
                 if (response.employee_token) {
                     setIsLogged(true);
+                    // eslint-disable-next-line react/prop-types
                     if (roles && roles.length > 0 && roles.includes(response.employee_role)) {
                         setIsAuthorized(true);
                     }
