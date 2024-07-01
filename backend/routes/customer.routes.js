@@ -5,5 +5,6 @@ const { route } = require("./employee.routes");
 const router = express.Router();
 
 router.post("/api/customer", [middleware.verifyToken,middleware.isAdmin], createCustomer);
-router.get("/api/customer", [middleware.verifyToken,middleware.isAdmin], getAllCustomers);
+router.get("/api/customers", [middleware.verifyToken,middleware.isAdmin], getAllCustomers);
 
+module.exports = router;

@@ -49,8 +49,26 @@ async function getAllEmployees(req, res, next) {
         });
     }
 }
-// Export the createEmployee controller 
+
+async function updateEmployee(req, res, next) {
+    const employeeId = req.params.id;
+    const employeeData = { ...req.body, employee_id: employeeId };
+
+    try {
+        const updated = await employeeService.updateEmployee(employeeData);
+        if (!updated) {
+            return res.status(400).json({ error: 'Failed to update employee!' });
+        }
+
+        res.status(200).json({ status: 'Employee updated successfully' });
+    } catch (error) {
+        console.error('Error updating employee:', error.message);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
 module.exports = {
     createEmployee,
-    getAllEmployees
+    getAllEmployees,
+    updateEmployee,
 };

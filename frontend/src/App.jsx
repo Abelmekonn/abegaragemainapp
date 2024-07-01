@@ -3,7 +3,6 @@ import About from './markup/pages/About'
 import Services from './markup/pages/Services'
 import Contact from './markup/pages/Contact'
 import Login from './markup/pages/Login'
-import AddEmployee from './markup/pages/admin/AddEmployee'
 import { Route, Routes } from 'react-router'
 
 import './assets/template_asset/css/color.css'
@@ -22,8 +21,11 @@ import Unauthorized from './markup/pages/Unauthorized'
 // admin pages
 import Dashboard from './markup/pages/admin/Dashboard'
 import Orders from './markup/pages/admin/Orders'
-import Customers from './markup/pages/admin/Customers'
+
 import Employees from './markup/pages/admin/Employees'
+import AddEmployee from './markup/pages/admin/AddEmployee'
+import AddCustomers from './markup/pages/admin/AddCustomers'
+import Update from './markup/pages/admin/Update'
 // import private route wrapper 
 import PrivateAuthRoute from './markup/components/Auth/PrivateAuthRoute'
 
@@ -46,15 +48,23 @@ function App() {
         <Route path="/admin/orders" element={<PrivateAuthRoute roles={[1, 2, 3]}>
           <Orders />
         </PrivateAuthRoute>} />
-        <Route path='/admin/customers' element={<PrivateAuthRoute roles={[ 2, 3]}>
+        {/* <Route path='/admin/customers' element={<PrivateAuthRoute roles={[ 2, 3]}>
           <Customers />
-        </PrivateAuthRoute>} />
+        </PrivateAuthRoute>} /> */}
         <Route path='/admin/employees' element={<PrivateAuthRoute roles={[3]}>
           <Employees/>
         </PrivateAuthRoute>}/>
         <Route path="/admin/add-employee" element={<PrivateAuthRoute roles={[ 3 ]}>
         <AddEmployee />
         </PrivateAuthRoute>} />
+        <Route path="/admin/employee/update/:employeeId" element={<PrivateAuthRoute roles={[ 3 ]}>
+        <Update/>
+        </PrivateAuthRoute>} />
+
+        <Route path="/admin/add-customer" element={<PrivateAuthRoute roles={[ 3 ]}>
+        <AddCustomers />
+        </PrivateAuthRoute>} />
+        
 
         <Route path='/unauthorized' element={<Unauthorized />} />
       </Routes>

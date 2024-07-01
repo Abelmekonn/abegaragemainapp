@@ -73,10 +73,45 @@ async function getAllEmployees() {
     const rows = await conn.query(query);
     return rows;
 }
-// Export the functions for use in the controller
+async function updateEmployee(employeeData) {
+    try {
+        const { employee_id, employee_first_name, employee_last_name, employee_phone, active_employee, company_role_id } = employeeData;
+
+        // Update employee info
+        const query = `
+            UPDATE employee_info
+            SET employee_first_name = ?, employee_last_name = ?, employee_phone = ?
+            WHERE employee_id = ?
+        `;
+        const rows = await conn.query(query, [employee_first_name, employee_last_name, employee_phone, employee_id]);
+
+        if (rows.affectedRows !== 1) {
+            return false;
+        }
+
+        // Update employee role
+        const updateRoleQuery = `
+            UPDATE employee_role
+            SET company_role_id = ?
+            WHERE employee_id = ?
+        `;
+        const roleRows = await conn.query(updateRoleQuery, [company_role_id, employee_id]);
+
+        if (roleRows.affectedRows !== 1) {
+            return false;
+        }
+
+        return true;
+    } catch (err) {
+        console.error('Error updating employee:', err);
+        throw err;
+    }
+}
+
 module.exports = {
     checkIfEmployeeExists,
     createEmployee,
     getEmployeeByEmail,
-    getAllEmployees
+    getAllEmployees,
+    updateEmployee,
 };

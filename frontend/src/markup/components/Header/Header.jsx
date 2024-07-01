@@ -11,7 +11,7 @@ import { useAuth } from '../../../contexts/AuthContext';
 
 function Header(props) {
     // Use the custom hook to access the data in the context 
-    const { isLogged, setIsLogged, employee } = useAuth();
+    const { isLogged, setIsLogged, employee,isAdmin } = useAuth();
     // console.log(useAuth());
 
     // Log out event handler function
@@ -65,6 +65,11 @@ function Header(props) {
                                                 <li className="dropdown"><a href="/services">Services</a>
                                                 </li>
                                                 <li><a href="/contact">Contact Us</a></li>
+                                                {isAdmin?(
+                                                <li><a href="/Admin">Admin</a></li>
+                                                ):(
+                                                    <li></li>
+                                                )}
                                             </ul>
                                         </div>
                                     </nav>

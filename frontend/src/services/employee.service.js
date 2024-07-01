@@ -1,4 +1,3 @@
-// src/services/employeeService.js
 const api_url = import.meta.env.VITE_API_URL;
 
 const createEmployee = async (formData,loggedInEmployeeToken) => {
@@ -36,10 +35,34 @@ const getAllEmployees = async (token) => {
   const response = await fetch(`${api_url}/api/employees`, requestOptions);
   return response;
 }
+const updateEmployee = async (formData, loggedInEmployeeToken) => {
+  const requestOptions = {
+      method: 'PUT',
+      headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': loggedInEmployeeToken,
+      },
+      body: JSON.stringify(formData),
+  };
+
+  try {
+      const response = await fetch(`${api_url}/api/employee/${formData.employee_id}`, requestOptions);
+
+      if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      return response.json(); // Parse JSON response
+  } catch (error) {
+      console.error('Error updating employee:', error.message);
+      throw error;
+  }
+};
 
 const employeeService = {
   createEmployee,
-  getAllEmployees
+  getAllEmployees,
+  updateEmployee,
 };
 
 export default employeeService;
