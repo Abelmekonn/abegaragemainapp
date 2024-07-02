@@ -24,6 +24,7 @@ import Orders from './markup/pages/admin/Orders'
 
 import Employees from './markup/pages/admin/Employees'
 import AddEmployee from './markup/pages/admin/AddEmployee'
+import Customers from './markup/pages/admin/Customers'
 import AddCustomers from './markup/pages/admin/AddCustomers'
 import Update from './markup/pages/admin/Update'
 // import private route wrapper 
@@ -61,6 +62,10 @@ function App() {
         <Update/>
         </PrivateAuthRoute>} />
 
+        {/* customers route  */}
+        <Route path="/admin/customers" element={<PrivateAuthRoute roles={[ 3 ]}>
+        <Customers />
+        </PrivateAuthRoute>} />
         <Route path="/admin/add-customer" element={<PrivateAuthRoute roles={[ 3 ]}>
         <AddCustomers />
         </PrivateAuthRoute>} />
