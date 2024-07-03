@@ -26,7 +26,8 @@ import Employees from './markup/pages/admin/Employees'
 import AddEmployee from './markup/pages/admin/AddEmployee'
 import Customers from './markup/pages/admin/Customers'
 import AddCustomers from './markup/pages/admin/AddCustomers'
-import Update from './markup/pages/admin/Update'
+import Update from './markup/pages/admin/UpdateEmployee'
+import UpdateCustomer from './markup/pages/admin/UpdateCustomer'
 // import private route wrapper 
 import PrivateAuthRoute from './markup/components/Auth/PrivateAuthRoute'
 
@@ -53,23 +54,25 @@ function App() {
           <Customers />
         </PrivateAuthRoute>} /> */}
         <Route path='/admin/employees' element={<PrivateAuthRoute roles={[3]}>
-          <Employees/>
-        </PrivateAuthRoute>}/>
-        <Route path="/admin/add-employee" element={<PrivateAuthRoute roles={[ 3 ]}>
-        <AddEmployee />
+          <Employees />
         </PrivateAuthRoute>} />
-        <Route path="/admin/employee/update/:employeeId" element={<PrivateAuthRoute roles={[ 3 ]}>
-        <Update/>
+        <Route path="/admin/add-employee" element={<PrivateAuthRoute roles={[3]}>
+          <AddEmployee />
+        </PrivateAuthRoute>} />
+        <Route path="/admin/employee/update/:employeeId" element={<PrivateAuthRoute roles={[3]}>
+          <Update />
         </PrivateAuthRoute>} />
 
         {/* customers route  */}
-        <Route path="/admin/customers" element={<PrivateAuthRoute roles={[ 3 ]}>
-        <Customers />
+        <Route path="/admin/customers" element={<PrivateAuthRoute roles={[3]}>
+          <Customers />
         </PrivateAuthRoute>} />
-        <Route path="/admin/add-customer" element={<PrivateAuthRoute roles={[ 3 ]}>
-        <AddCustomers />
+        <Route path="/admin/add-customer" element={<PrivateAuthRoute roles={[3]}>
+          <AddCustomers />
         </PrivateAuthRoute>} />
-        
+        <Route path="/admin/customer/update/:customerId" element={<PrivateAuthRoute roles={[3]}>
+          <UpdateCustomer />
+        </PrivateAuthRoute>} />
 
         <Route path='/unauthorized' element={<Unauthorized />} />
       </Routes>

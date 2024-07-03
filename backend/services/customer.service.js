@@ -68,10 +68,48 @@ async function getAllCustomers() {
     return rows;
 }
 
+// function to update customer profile
+async function updateCustomer(customerData) {
+    try {
+        const { customer_id, customer_first_name, customer_last_name, customer_phone_number, active_customer_status } = customerData;
+
+        // Update customer identifier
+        const query1 = `
+            UPDATE customer_identifier
+            SET customer_phone_number = ?
+            WHERE customer_id = ?
+        `;
+        const rows1 = await conn.query(query1, [customer_phone_number, customer_id]);
+
+        if (rows1.affectedRows !== 1) {
+            return false;
+        }
+
+        // Update customer info
+        const query2 = `
+            UPDATE customer_info
+            SET customer_first_name = ?, customer_last_name = ?, active_customer_status = ?
+            WHERE customer_id = ?
+        `;
+        const rows2 = await conn.query(query2, [customer_first_name, customer_last_name, active_customer_status, customer_id]);
+
+        if (rows2.affectedRows !== 1) {
+            return false;
+        }
+
+        return true;
+    } catch (err) {
+        console.error('Error updating customer:', err);
+        throw err;
+    }
+}
+
+
 // Export the functions for use in the controller
 module.exports = {
     checkIfCustomerExists,
     createCustomer,
     getCustomerByEmail,
-    getAllCustomers
+    getAllCustomers,
+    updateCustomer // Add the updateCustomer function to exports
 };

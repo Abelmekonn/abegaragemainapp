@@ -1,6 +1,6 @@
 import React from "react";
 import AdminMenu from "../../components/Admin/AdminMenu/AdminMenu";
-import AddCustomerForm from "../../components/Admin/AddCustomer/AddCustomerForm";
+import AddCustomerForm from "../../components/Admin/Customer/AddCustomerForm";
 const AddCustomers = () => {
   return (
     <div className=" admin-pages">

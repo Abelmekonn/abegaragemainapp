@@ -9,6 +9,7 @@ const employeeRoute = require('./employee.routes');
 const loginRoutes = require('./login.routes');
 const installRoutes = require('./install.routes');
 const customerRoute=require('./customer.routes')
+const vehicleRoute=require('./vehicle.routes')
 // Add install route without authentication middleware
 router.use('/install', installRoutes);
 
@@ -20,5 +21,7 @@ router.use(customerRoute)
 
 // Add login routes without authentication middleware (since it's the login route)
 router.use( loginRoutes);
+// Add vehicle routes
+router.use(vehicleRoute)
 
 module.exports = router;

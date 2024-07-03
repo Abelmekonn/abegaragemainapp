@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import employeeService from '../../../../services/employee.service';
 import { useAuth } from '../../../../contexts/AuthContext';
-import {useNavigate} from 'react-router-dom'
 
 const UpdateEmployeeComponent = () => {
     const { employeeId } = useParams();
@@ -14,6 +13,7 @@ const UpdateEmployeeComponent = () => {
         employee_last_name: '',
         employee_phone: '',
         company_role_id: '',
+        active_employee: 1,
     });
 
     useEffect(() => {
@@ -34,16 +34,18 @@ const UpdateEmployeeComponent = () => {
     }, [employeeId, loggedInEmployeeToken]);
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setEmployeeData(prevData => ({ ...prevData, [name]: value }));
+        const { name, value, type, checked } = e.target;
+        setEmployeeData(prevData => ({
+            ...prevData,
+            [name]: type === 'checkbox' ? (checked ? 1 : 0) : value
+        }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             await employeeService.updateEmployee(employeeData, loggedInEmployeeToken);
-            // Optionally redirect or show success message
-            navigate('/admin/employees')
+            navigate('/admin/employees');
         } catch (error) {
             console.error('Error updating employee:', error.message);
         }
@@ -53,13 +55,13 @@ const UpdateEmployeeComponent = () => {
         <section className="contact-section">
             <div className="auto-container">
                 <div className="contact-title">
-                    <h2>Edit:{employeeData.employee_first_name} {employeeData.employee_last_name} </h2>
+                    <h2>Edit: {employeeData.employee_first_name} {employeeData.employee_last_name}</h2>
                 </div>
                 <div className="row clearfix">
                     <div className="form-column col-lg-7">
                         <div className="inner-column">
                             <div className="contact-form">
-                                <h4>email :{employeeData.employee_email}</h4>
+                                <h4>Email: {employeeData.employee_email}</h4>
                                 <form onSubmit={handleSubmit}>
                                     <div className="row clearfix">
                                         <div className="form-group col-md-12">
@@ -102,6 +104,17 @@ const UpdateEmployeeComponent = () => {
                                             </select>
                                         </div>
                                         <div className="form-group col-md-12">
+                                            <label>
+                                                <input
+                                                    type="checkbox"
+                                                    name="active_employee"
+                                                    checked={employeeData.active_employee === 1}
+                                                    onChange={handleChange}
+                                                />
+                                                Active Employee
+                                            </label>
+                                        </div>
+                                        <div className="form-group col-md-12">
                                             <button className="theme-btn btn-style-one" type="submit" data-loading-text="Please wait...">
                                                 <span>Update Employee</span>
                                             </button>
@@ -110,7 +123,7 @@ const UpdateEmployeeComponent = () => {
                                 </form>
                             </div>
                         </div>
-                    </div>
+                    </div>      
                 </div>
             </div>
         </section>

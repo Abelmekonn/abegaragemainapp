@@ -1,8 +1,8 @@
 const express = require("express");
-const { createEmployee,getAllEmployees,updateEmployee} = require("../controllers/employee.controller");
-
 const middleware=require("../middlewares/auth.middleware")
 const router = express.Router();
+const { createEmployee,getAllEmployees,updateEmployee} = require("../controllers/employee.controller");
+
 
 // Route to create employee
 router.post("/api/employee", [middleware.verifyToken,middleware.isAdmin], createEmployee);

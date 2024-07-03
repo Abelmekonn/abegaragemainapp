@@ -36,22 +36,46 @@ async function createCustomer(req, res, next) {
 
 // Create the getAllCustomers controller
 async function getAllCustomers(req, res, next) {
-    // Call the getAllCustomers method from the customer service
-    const customers = await customerService.getAllCustomers();
-    if (!customers) {
-        res.status(400).json({
-            error: "Failed to get all customers!"
-        });
-    } else {
-        res.status(200).json({
-            status: "success",
-            data: customers,
+    try {
+        const customers = await customerService.getAllCustomers();
+        if (!customers) {
+            return res.status(400).json({
+                error: "Failed to get all customers!"
+            });
+        } else {
+            return res.status(200).json({
+                status: "success",
+                data: customers,
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            error: "Something went wrong!"
         });
     }
 }
 
-// Export the createCustomer and getAllCustomers controllers
+// Create the updateCustomer controller
+async function updateCustomer(req, res, next) {
+    const customerData = req.body;
+
+    try {
+        const updated = await customerService.updateCustomer(customerData);
+        if (!updated) {
+            return res.status(400).json({ error: "Failed to update customer!" });
+        }
+
+        res.status(200).json({ status: "Customer updated successfully" });
+    } catch (error) {
+        console.error('Error updating customer:', error.message);
+        res.status(500).json({ error: "Internal server error" });
+    }
+}
+
+// Export the createCustomer, getAllCustomers, and updateCustomer controllers
 module.exports = {
     createCustomer,
-    getAllCustomers
+    getAllCustomers,
+    updateCustomer
 };

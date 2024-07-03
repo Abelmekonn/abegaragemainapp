@@ -1,10 +1,14 @@
 import React from "react";
+// Import the auth hook 
 import { useAuth } from "../../../contexts/AuthContext";
+// Import the login form component 
 import LoginForm from '../../components/LoginForm/LoginForm';
+// Import the admin menu component
 import AdminMenu from "../../components/Admin/AdminMenu/AdminMenu";
-import CustomersList from "../../components/Admin/Customer/CustomerList";
-
-function Customers() {
+// Import the Update customer
+import CustomerUpdate from "../../components/Admin/Customer/CustomerUpdate";
+function UpdateCustomer() {
+    // Destructure the auth hook 
     const { isLogged, isAdmin } = useAuth();
 
     if (isLogged) {
@@ -17,7 +21,7 @@ function Customers() {
                                 <AdminMenu />
                             </div>
                             <div className="col-md-9 admin-right-side">
-                                <CustomersList />
+                                <CustomerUpdate />
                             </div>
                         </div>
                     </div>
@@ -37,6 +41,7 @@ function Customers() {
             </div>
         );
     }
+
 }
 
-export default Customers;
+export default UpdateCustomer; 
