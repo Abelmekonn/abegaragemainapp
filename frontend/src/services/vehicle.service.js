@@ -24,7 +24,7 @@ const createVehicle = async (vehicleData, loggedInEmployeeToken) => {
     }
 };
 
-const getVehiclesByCustomerId = async (customerId, token) => {
+const getVehiclesByCustomerId = async ( token) => {
     const requestOptions = {
         method: 'GET',
         headers: {

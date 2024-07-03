@@ -10,6 +10,7 @@ import './assets/template_asset/css/style.css'
 import './assets/template_asset/css/bootstrap.css'
 import './assets/template_asset/css/responsive.css'
 
+
 // import custom css
 import './assets/style/custom.css'
 
@@ -26,6 +27,7 @@ import Employees from './markup/pages/admin/Employees'
 import AddEmployee from './markup/pages/admin/AddEmployee'
 import Customers from './markup/pages/admin/Customers'
 import AddCustomers from './markup/pages/admin/AddCustomers'
+import CustomerPage from './markup/pages/admin/CustomerPage'
 import Update from './markup/pages/admin/UpdateEmployee'
 import UpdateCustomer from './markup/pages/admin/UpdateCustomer'
 // import private route wrapper 
@@ -67,6 +69,9 @@ function App() {
         <Route path="/admin/customers" element={<PrivateAuthRoute roles={[3]}>
           <Customers />
         </PrivateAuthRoute>} />
+        <Route path="/admin/customer/detail/:customerId" element={<PrivateAuthRoute roles={[3]}>
+          <CustomerPage />
+        </PrivateAuthRoute>} />
         <Route path="/admin/add-customer" element={<PrivateAuthRoute roles={[3]}>
           <AddCustomers />
         </PrivateAuthRoute>} />
@@ -77,6 +82,7 @@ function App() {
         <Route path='/unauthorized' element={<Unauthorized />} />
       </Routes>
       <Footer />
+      <div className="scroll-to-top scroll-to-target" data-target="html"><span className="flaticon-right-arrow"></span></div>
     </>
   )
 }

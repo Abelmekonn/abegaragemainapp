@@ -317,3 +317,24 @@ input:disabled {
 .change-status {
     cursor: pointer;
 }
+.vehicle-box{
+    background-color: white;
+    box-shadow: 0px 10px 39px 2px rgba(209,209,209,1);
+    padding: 10px 9px;
+}
+.customer-info{
+    width: 100%;
+    display: flex;
+}
+.add-vehicle{
+    width: 80%;
+    padding: 30px 30px;
+    background-color: white;
+}
+.close{
+    color: red;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 4px 4px;
+}

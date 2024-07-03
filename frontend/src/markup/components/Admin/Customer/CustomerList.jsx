@@ -5,11 +5,11 @@ import { useAuth } from '../../../../contexts/AuthContext';
 import { format } from 'date-fns';
 import customerService from "../../../../services/customer.service";
 import { useNavigate } from 'react-router-dom';
-
+import AddVehicleForm from "../Vehicle/AddVehicleForm";
 const CustomersList = () => {
     const [customers, setCustomers] = useState([]);
-    const [apiError, setApiError] = useState(false);
     const [apiErrorMessage, setApiErrorMessage] = useState(null);
+    const [apiError, setApiError] = useState(false);
     const { employee } = useAuth();
     let token = null;
     if (employee) {
@@ -51,6 +51,10 @@ const CustomersList = () => {
     const handleEditCustomer = (customerId) => {
         navigate(`/admin/customer/update/${customerId}`);
     };
+
+    const handleDetailCustomer=(customerId)=>{
+        navigate(`/admin/customer/detail/${customerId}`)
+    }
 
     return (
         <>
@@ -98,7 +102,7 @@ const CustomersList = () => {
                                                         <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                                                         <path fillRule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
                                                     </svg></a>
-                                                    <a href=""><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
+                                                    <a onClick={() => handleDetailCustomer(customer.customer_id)}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
                                                         <path fillRule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5" />
                                                         <path fillRule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z" />
                                                     </svg></a>
@@ -110,50 +114,7 @@ const CustomersList = () => {
                             </Table>
                         </div>
                     </section>
-                    <section className="history-section">
-                        <div className="auto-container">
-                            <div className="history-block">
-                                <div className="years">2003</div>
-                                <div className="content">
-                                    <h4>Company Starting.</h4>
-                                    <div className="text">Nor again is there anyone who loves or pursues or desires to obtain pain of
-                                        itself, because it is pain, but because occasionally circumstances occur in which toil and
-                                        pain can procure him some great pleasure. To take a trivial example, which of us ever
-                                        undertakes laborious physical exercise, except to obtain some advantage from it. which of us
-                                        ever undertakes laborious physical exercise, except to obtain some advantage from it. which
-                                        of us ever undertakes laborious physical exercise, except to obtain some advantage from it
-                                        except to obtain some advantage from it.</div>
-                                </div>
-                            </div>
-                            <div className="history-block">
-                                <div className="years">2007</div>
-                                <div className="content">
-                                    <h4>Increase comapany member by 45 plus.</h4>
-                                    <div className="text">Nor again is there anyone who loves or pursues or desires to obtain pain of
-                                        itself, because it is pain, but because occasionally circumstances occur in which toil and
-                                        pain can procure him some great pleasure. To take a trivial example, which of us ever
-                                        undertakes laborious physical exercise, except to obtain some advantage from it. which of us
-                                        ever undertakes laborious physical exercise, except to obtain some advantage from it. which
-                                        of us ever undertakes laborious physical exercise, except to obtain some advantage from it
-                                        except to obtain some advantage from it.</div>
-                                </div>
-                            </div>
-                            <div className="history-block">
-                                <div className="years">2011</div>
-                                <div className="content">
-                                    <h4>Get Best Company Award on international level.</h4>
-                                    <div className="text">Nor again is there anyone who loves or pursues or desires to obtain pain of
-                                        itself, because it is pain, but because occasionally circumstances occur in which toil and
-                                        pain can procure him some great pleasure. To take a trivial example, which of us ever
-                                        undertakes laborious physical exercise, except to obtain some advantage from it. which of us
-                                        ever undertakes laborious physical exercise, except to obtain some advantage from it. which
-                                        of us ever undertakes laborious physical exercise, except to obtain some advantage from it
-                                        except to obtain some advantage from it.</div>
-                                </div>
-                            </div>
-                            
-                        </div>
-                    </section>
+                    
                 </>
             )}
         </>

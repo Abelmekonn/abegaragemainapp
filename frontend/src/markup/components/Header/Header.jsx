@@ -132,6 +132,38 @@ function Header(props) {
                     <div className="cursor-follower"></div>
                 </div>
             </header>
+            {/* <div className="sticky-header">
+                <div className="header-upper">
+                    <div className="auto-container">Name
+                        <div className="inner-container">
+                            <div className="logo-box">
+                                <div className="nav-outer">
+                                    
+                                    <div className="mobile-nav-toggler"><img src="assets/images/icons/icon-bar.png" alt="" />
+                                    </div>
+                                    
+                                    <nav className="main-menu navbar-expand-md navbar-light">
+                                    </nav>
+                                </div>
+                                <div className="search-btn"></div>
+                                <div className="link-btn"><a href="/login" className="theme-btn btn-style-one">Login</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div className="mobile-menu">
+                <div className="menu-backdrop"></div>
+                <div className="close-btn"><span className="icon flaticon-remove"></span></div>
+                <nav className="menu-box">
+                    <div className="nav-logo"><a href="index.html"><img src="assets/images/logo-two.png" alt=""
+                                title="" /></a></div>
+                    <div className="menu-outer">
+                    </div>
+                </nav>
+            </div> */}
         </div>
     );
 }
