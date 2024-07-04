@@ -9,12 +9,16 @@ const createVehicle = async (vehicleData) => {
     `;
     try {
         const [result] = await conn.query(query, [customer_id, vehicle_year, vehicle_make, vehicle_model, vehicle_type, vehicle_mileage, vehicle_tag, vehicle_serial, vehicle_color]);
+        if (result.affectedRows !== 1) {
+            throw new Error('Failed to insert vehicle');
+        }
         return result.insertId;
     } catch (error) {
         console.error('Error creating vehicle:', error);
-        throw error;
+        throw error; // Rethrow the error to propagate it upwards
     }
 };
+
 
 const getVehiclesByCustomerId = async (customerId) => {
     const query = `

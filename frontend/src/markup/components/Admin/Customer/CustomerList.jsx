@@ -5,8 +5,8 @@ import { useAuth } from '../../../../contexts/AuthContext';
 import { format } from 'date-fns';
 import customerService from "../../../../services/customer.service";
 import { useNavigate } from 'react-router-dom';
-import AddVehicleForm from "../Vehicle/AddVehicleForm";
 const CustomersList = () => {
+
     const [customers, setCustomers] = useState([]);
     const [apiErrorMessage, setApiErrorMessage] = useState(null);
     const [apiError, setApiError] = useState(false);

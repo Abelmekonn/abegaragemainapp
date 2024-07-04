@@ -2,22 +2,17 @@
 const vehicleService = require('../services/vehicle.service');
 
 // Create the add vehicle controller
-async function createVehicle(req, res, next) {
-    const vehicleData = req.body;
+const createVehicle = async (req, res) => {
+    const vehicleData = req.body; // Assuming vehicle data is passed in the request body
 
     try {
-        const vehicleId = await vehicleService.createVehicle(vehicleData);
-        return res.status(200).json({
-            status: "Vehicle created",
-            vehicleId: vehicleId
-        });
+        const insertedId = await vehicleService.createVehicle(vehicleData);
+        res.status(201).json({ id: insertedId, message: 'Vehicle created successfully' });
     } catch (error) {
-        console.error('Error creating vehicle:', error.message);
-        return res.status(500).json({
-            error: "Internal server error"
-        });
+        console.error('Error creating vehicle:', error);
+        res.status(500).json({ error: 'Failed to create vehicle' });
     }
-}
+};
 
 // Create the get vehicles by customer ID controller
 async function getVehiclesByCustomerId(req, res, next) {

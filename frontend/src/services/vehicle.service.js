@@ -13,7 +13,7 @@ const createVehicle = async (vehicleData, loggedInEmployeeToken) => {
     try {
         const response = await fetch(`${api_url}/api/vehicle`, requestOptions);
 
-        if (!response.ok) {
+        if (!response.status==201) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
@@ -24,7 +24,7 @@ const createVehicle = async (vehicleData, loggedInEmployeeToken) => {
     }
 };
 
-const getVehiclesByCustomerId = async ( token) => {
+const getVehiclesByCustomerId = async (token) => {
     const requestOptions = {
         method: 'GET',
         headers: {

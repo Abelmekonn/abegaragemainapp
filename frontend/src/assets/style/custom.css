@@ -338,3 +338,25 @@ input:disabled {
     right: 0;
     margin: 4px 4px;
 }
+.service-box{
+    background-color: white;
+    box-shadow: 0px 10px 39px 2px rgba(209,209,209,1);
+    padding: 10px 9px;
+}
+.bi-trash {
+    color: red;
+}
+.contact-form textarea{
+    display: block;
+    width: 100%;
+    line-height: 28px;
+    height: 120px;
+    font-size: 16px;
+    padding: 10px 22px;
+    background: #ffffff;
+    border: 1px solid #dddddd;
+    transition: all 500ms ease;
+    -webkit-transition: all 500ms ease;
+    -ms-transition: all 500ms ease;
+    -o-transition: all 500ms ease;
+}

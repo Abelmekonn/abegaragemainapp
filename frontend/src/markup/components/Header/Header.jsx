@@ -4,18 +4,18 @@ import { Link } from 'react-router-dom'
 // Import the logo image 
 import logo from '../../../assets/images/logo.png';
 // Import the login service to access the logout function
-import {LogOut} from '../../../services/login.service';
+import { LogOut } from '../../../services/login.service';
 // Import the custom context hook 
 import { useAuth } from '../../../contexts/AuthContext';
 
 
 function Header(props) {
     // Use the custom hook to access the data in the context 
-    const { isLogged, setIsLogged, employee,isAdmin } = useAuth();
+    const { isLogged, setIsLogged, employee, isAdmin } = useAuth();
     // console.log(useAuth());
 
     // Log out event handler function
-        // Call the logout function from the login service 
+    // Call the logout function from the login service 
     const logOut = () => {
         LogOut();
         // Set the isLogged state to false 
@@ -65,9 +65,9 @@ function Header(props) {
                                                 <li className="dropdown"><a href="/services">Services</a>
                                                 </li>
                                                 <li><a href="/contact">Contact Us</a></li>
-                                                {isAdmin?(
-                                                <li><a href="/Admin">Admin</a></li>
-                                                ):(
+                                                {isAdmin ? (
+                                                    <li><a href="/Admin">Admin</a></li>
+                                                ) : (
                                                     <li></li>
                                                 )}
                                             </ul>
@@ -93,20 +93,44 @@ function Header(props) {
                         <div className="auto-container">
                             <div className="inner-container">
                                 <div className="logo-box">
-                                    <div className="logo"><a href="/"><img src="assets/images/custom/logo.png" alt="" /></a>
+                                    <div className="logo"><a href="/"><img src={logo} alt="" /></a>
                                     </div>
                                 </div>
                                 <div className="right-column">
                                     <div className="nav-outer">
                                         <div className="mobile-nav-toggler"><img src="assets/images/icons/icon-bar.png" alt="" />
                                         </div>
-
+                                        <nav className="main-menu navbar-expand-md navbar-light">
+                                            <div className="collapse navbar-collapse show clearfix" id="navbarSupportedContent">
+                                                <ul className="navigation">
+                                                    <li className="dropdown"><a href="/">Home</a>
+                                                    </li>
+                                                    <li className="dropdown"><a href="/about">About Us</a>
+                                                    </li>
+                                                    <li className="dropdown"><a href="/services">Services</a>
+                                                    </li>
+                                                    <li><a href="/contact">Contact Us</a></li>
+                                                    {isAdmin ? (
+                                                        <li><a href="/Admin">Admin</a></li>
+                                                    ) : (
+                                                        <li></li>
+                                                    )}
+                                                </ul>
+                                            </div>
+                                        </nav>
                                         <nav className="main-menu navbar-expand-md navbar-light">
                                         </nav>
                                     </div>
                                     <div className="search-btn"></div>
-                                    <div className="link-btn"><a href="/login" className="theme-btn btn-style-one">Login</a>
+                                    {isLogged ? (
+                                    <div className="link-btn">
+                                        <Link to="/" className="theme-btn btn-style-one blue" onClick={logOut} >Log out</Link>
                                     </div>
+                                ) : (
+                                    <div className="link-btn">
+                                        <Link to="/login" className="theme-btn btn-style-one">Login</Link>
+                                    </div>
+                                )}
                                 </div>
                             </div>
                         </div>
@@ -138,10 +162,10 @@ function Header(props) {
                         <div className="inner-container">
                             <div className="logo-box">
                                 <div className="nav-outer">
-                                    
+
                                     <div className="mobile-nav-toggler"><img src="assets/images/icons/icon-bar.png" alt="" />
                                     </div>
-                                    
+
                                     <nav className="main-menu navbar-expand-md navbar-light">
                                     </nav>
                                 </div>
@@ -152,18 +176,18 @@ function Header(props) {
                         </div>
                     </div>
                 </div>
-                
+
             </div>
-            {/* <div className="mobile-menu">
+            <div className="mobile-menu">
                 <div className="menu-backdrop"></div>
                 <div className="close-btn"><span className="icon flaticon-remove"></span></div>
                 <nav className="menu-box">
-                    <div className="nav-logo"><a href="index.html"><img src="assets/images/logo-two.png" alt=""
-                                title="" /></a></div>
+                    <div className="nav-logo"><a href="index.html"><img src={logo} alt=""
+                        title="" /></a></div>
                     <div className="menu-outer">
                     </div>
                 </nav>
-            </div> */}
+            </div>
         </div>
     );
 }
