@@ -132,7 +132,7 @@ function Header(props) {
                     <div className="cursor-follower"></div>
                 </div>
             </header>
-            {/* <div className="sticky-header">
+            <div className="sticky-header">
                 <div className="header-upper">
                     <div className="auto-container">Name
                         <div className="inner-container">
@@ -154,7 +154,7 @@ function Header(props) {
                 </div>
                 
             </div>
-            <div className="mobile-menu">
+            {/* <div className="mobile-menu">
                 <div className="menu-backdrop"></div>
                 <div className="close-btn"><span className="icon flaticon-remove"></span></div>
                 <nav className="menu-box">
