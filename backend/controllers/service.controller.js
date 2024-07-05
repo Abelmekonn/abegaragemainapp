@@ -93,26 +93,26 @@ async function updateService(req, res, next) {
 }
 
 // Create the deleteService controller
-async function deleteService(req, res, next) {
+const deleteService = async (req, res) => {
+    const serviceId = req.params.serviceId; // Ensure serviceId is correctly obtained from request parameters
+
     try {
-        const serviceId = req.params.id;
-        const deleted = await commonServiceService.deleteService(serviceId);
-        if (!deleted) {
-            return res.status(400).json({
-                error: "Failed to delete service!"
-            });
+        // Perform validation or additional checks if necessary
+        
+        // Example: Delete logic
+        const result = await ServiceModel.deleteServiceById(serviceId);
+
+        if (!result) {
+            return res.status(404).json({ message: 'Service not found' });
         }
 
-        res.status(200).json({
-            status: "Service deleted successfully"
-        });
+        return res.status(200).json({ message: 'Service deleted successfully' });
     } catch (error) {
-        console.error('Error deleting service:', error.message);
-        res.status(500).json({
-            error: "Internal server error"
-        });
+        console.error('Error deleting service:', error);
+        return res.status(500).json({ message: 'Failed to delete service' });
     }
-}
+};
+
 
 // Export the createService, getServiceById, getAllServices, updateService, and deleteService controllers
 module.exports = {

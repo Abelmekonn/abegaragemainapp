@@ -70,9 +70,9 @@ const getAllServices = async (token) => {
     }
 };
 
-const updateService = async (serviceData, token) => {
+const updateService = async (serviceId, serviceData, token) => {
     const requestOptions = {
-        method: 'PUT', // Use PUT for update
+        method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
             'x-access-token': token
@@ -81,7 +81,7 @@ const updateService = async (serviceData, token) => {
     };
 
     try {
-        const response = await fetch(`${api_url}/api/service/update`, requestOptions);
+        const response = await fetch(`${api_url}/api/service/update/${serviceId}`, requestOptions);
 
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
@@ -94,7 +94,7 @@ const updateService = async (serviceData, token) => {
     }
 };
 
-const deleteService = async (token) => {
+const deleteService = async (serviceId, token) => {
     const requestOptions = {
         method: 'DELETE',
         headers: {
@@ -104,7 +104,7 @@ const deleteService = async (token) => {
     };
 
     try {
-        const response = await fetch(`${api_url}/api/service/delete`, requestOptions);
+        const response = await fetch(`${api_url}/api/service/delete/${serviceId}`, requestOptions);
 
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
@@ -116,6 +116,7 @@ const deleteService = async (token) => {
         throw error; // Rethrow error for component to handle
     }
 };
+
 
 const serviceService = {
     createService,
