@@ -4,7 +4,7 @@ import AdminMenu from '../../components/Admin/AdminMenu/AdminMenu'
 function AdminService() {
     return (
         <>
-            <div className="container-fluid admin-pages contact-section">
+            <div className="container-fluid admin-pages ">
                 <div className="row">
                     <div className="col-md-3 admin-left-side">
                         <AdminMenu />

@@ -100,7 +100,7 @@ const deleteService = async (req, res) => {
         // Perform validation or additional checks if necessary
         
         // Example: Delete logic
-        const result = await ServiceModel.deleteServiceById(serviceId);
+        const result = await commonServiceService.deleteService(serviceId);
 
         if (!result) {
             return res.status(404).json({ message: 'Service not found' });

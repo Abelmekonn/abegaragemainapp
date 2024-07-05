@@ -32,7 +32,7 @@ function ServiceList() {
         };
 
         fetchServices();
-    }, [token]);
+    }, []);
 
     const handleDelete = async (serviceId) => {
         try {

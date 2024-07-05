@@ -34,6 +34,7 @@ function AddService() {
             await serviceService.createService(serviceData, token);
             
             setSuccess('Service added successfully!');
+            location.reload();
             setServiceName('');
             setDescription('');
         } catch (error) {

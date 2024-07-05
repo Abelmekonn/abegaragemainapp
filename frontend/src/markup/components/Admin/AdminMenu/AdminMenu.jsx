@@ -2,7 +2,7 @@ import React from 'react';
 
 function AdminMenu(props) {
     return (
-        <div>
+        <div className=''>
             <div className="admin-menu">
                 <h2>Admin Menu</h2>
             </div>
