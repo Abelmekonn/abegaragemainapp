@@ -29,7 +29,7 @@ import CustomerPage from './markup/pages/admin/CustomerPage'
 import Update from './markup/pages/admin/UpdateEmployee'
 import UpdateCustomer from './markup/pages/admin/UpdateCustomer'
 import AdminService from './markup/pages/admin/AdminService'
-
+import AddNewOrder from './markup/pages/admin/AddNewOrder'
 // import private route wrapper 
 import PrivateAuthRoute from './markup/components/Auth/PrivateAuthRoute'
 
@@ -55,6 +55,7 @@ function App() {
         {/* Admin route */}
         <Route path="/admin" element={<PrivateAuthRoute roles={[2, 3]}><Dashboard /></PrivateAuthRoute>} />
         <Route path="/admin/orders" element={<PrivateAuthRoute roles={[1, 2, 3]}><Orders /></PrivateAuthRoute>} />
+        <Route path="/admin/order" element={<PrivateAuthRoute roles={[3]}><AddNewOrder /></PrivateAuthRoute>} />
         {/* <Route path='/admin/customers' element={<PrivateAuthRoute roles={[ 2, 3]}><Customers /></PrivateAuthRoute>} /> */}
         <Route path='/admin/employees' element={<PrivateAuthRoute roles={[3]}><Employees /></PrivateAuthRoute>} />
         <Route path="/admin/add-employee" element={<PrivateAuthRoute roles={[3]}><AddEmployee /></PrivateAuthRoute>} />
