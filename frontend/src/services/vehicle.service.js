@@ -13,7 +13,7 @@ const createVehicle = async (vehicleData, loggedInEmployeeToken) => {
     try {
         const response = await fetch(`${api_url}/api/vehicle`, requestOptions);
 
-        if (!response.status==201) {
+        if (response.status !== 201) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
@@ -24,7 +24,7 @@ const createVehicle = async (vehicleData, loggedInEmployeeToken) => {
     }
 };
 
-const getVehiclesByCustomerId = async (token) => {
+const getVehicles = async (token) => {
     const requestOptions = {
         method: 'GET',
         headers: {
@@ -42,7 +42,7 @@ const getVehiclesByCustomerId = async (token) => {
 
         return response.json(); // Parse JSON response
     } catch (error) {
-        console.error('Error in getVehiclesByCustomerId:', error.message);
+        console.error('Error in getVehicles:', error.message);
         throw error; // Rethrow error for component to handle
     }
 };
@@ -73,7 +73,7 @@ const updateVehicle = async (vehicleData, token) => {
 
 const vehicleService = {
     createVehicle,
-    getVehiclesByCustomerId,
+    getVehicles,
     updateVehicle // Added updateVehicle to the exported service
 };
 

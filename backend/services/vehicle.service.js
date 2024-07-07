@@ -8,11 +8,14 @@ const createVehicle = async (vehicleData) => {
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
     try {
-        const [result] = await conn.query(query, [customer_id, vehicle_year, vehicle_make, vehicle_model, vehicle_type, vehicle_mileage, vehicle_tag, vehicle_serial, vehicle_color]);
-        if (result.affectedRows !== 1) {
+        const result = await conn.query(query, [customer_id, vehicle_year, vehicle_make, vehicle_model, vehicle_type, vehicle_mileage, vehicle_tag, vehicle_serial, vehicle_color]);
+        console.log('Query result:', result);
+
+        if (!result || !result[0] || !result[0].affectedRows || result[0].affectedRows !== 1) {
             throw new Error('Failed to insert vehicle');
         }
-        return result.insertId;
+
+        return result[0].insertId;
     } catch (error) {
         console.error('Error creating vehicle:', error);
         throw error; // Rethrow the error to propagate it upwards
@@ -20,12 +23,12 @@ const createVehicle = async (vehicleData) => {
 };
 
 
-const getVehiclesByCustomerId = async (customerId) => {
+const getVehicles = async () => {
     const query = `
-        SELECT * FROM customer_vehicle_info WHERE customer_id = ?
+        SELECT * FROM customer_vehicle_info
     `;
     try {
-        const [rows] = await conn.query(query, [customerId]);
+        const [rows] = await conn.query(query);
         return rows;
     } catch (error) {
         console.error('Error fetching vehicles:', error);
@@ -62,6 +65,6 @@ const updateVehicle = async (vehicleData) => {
 
 module.exports = {
     createVehicle,
-    getVehiclesByCustomerId,
+    getVehicles,
     updateVehicle
 };

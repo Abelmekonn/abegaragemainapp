@@ -1,6 +1,78 @@
-import React from 'react'
-import AddVehicleForm from '../Vehicle/AddVehicleForm'
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router';
+import { useAuth } from '../../../../contexts/AuthContext';
+import AddVehicleForm from '../Vehicle/AddVehicleForm';
+import customerService from '../../../../services/customer.service';
+import vehicleService from '../../../../services/vehicle.service';
+
 function CustomerDetail() {
+    const { customerId } = useParams();
+    const [customer, setCustomer] = useState(null);
+    const [vehicles, setVehicles] = useState([]);
+    const [apiErrorMessage, setApiErrorMessage] = useState(null);
+    const [apiError, setApiError] = useState(false);
+    const { employee } = useAuth();
+    let token = null;
+
+    if (employee) {
+        token = employee.employee_token;
+    }
+
+    useEffect(() => {
+        const fetchCustomer = async () => {
+            try {
+                const response = await customerService.getAllCustomers(token);
+                if (!response.ok) {
+                    setApiError(true);
+                    if (response.status === 401) {
+                        setApiErrorMessage("Please login again");
+                    } else if (response.status === 403) {
+                        setApiErrorMessage("You are not authorized to view this page");
+                    } else {
+                        setApiErrorMessage("Please try again later");
+                    }
+                    return;
+                }
+                const data = await response.json();
+                console.log(data)
+                const filteredCustomer = data.data.find(customer => customer.customer_id === parseInt(customerId));
+                setCustomer(filteredCustomer);
+            } catch (error) {
+                console.error('Error fetching customers:', error);
+                setApiError(true);
+                setApiErrorMessage("Error fetching customers. Please try again later.");
+            }
+        };
+        
+        if (customerId) {
+            fetchCustomer();
+        }
+    }, [customerId, token]);
+
+    useEffect(() => {
+        const fetchVehicles = async () => {
+            try {
+                const fetchedVehicles = await vehicleService.getVehicles(token);
+                setVehicles(fetchedVehicles);
+                console.log(vehicles)
+            } catch (error) {
+                console.error('Error fetching vehicles:', error);
+                
+            }
+        };
+
+        fetchVehicles();
+    }, []);
+
+
+    if (apiError) {
+        return <div>{apiErrorMessage}</div>;
+    }
+
+    if (!customer) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <section className="history-section my-3">
             <div className="auto-container">
@@ -9,9 +81,9 @@ function CustomerDetail() {
                     <div className="content">
                         <h4>Customer:</h4>
                         <div className="text ">
-                            <div className="customer-info"><h5>Email </h5><p>: Abel@gmail.com</p></div>
-                            <div className="customer-info"><h5>Phone Number</h5><p>: 0945774931 </p></div>
-                            <div className="customer-info"><h5>Active Customer</h5><p>: yes </p></div>
+                            <div className="customer-info"><h5>Email </h5><p>: {customer.customer_email}</p></div>
+                            <div className="customer-info"><h5>Phone Number</h5><p>: {customer.customer_phone_number}</p></div>
+                            <div className="customer-info"><h5>Active Customer</h5><p>: {customer.active_customer_status ? 'Yes' : 'No'}</p></div>
                             <div className="customer-info"><h5>Edit customer info</h5><p>: <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
                                 <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                                 <path fillRule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
@@ -24,10 +96,19 @@ function CustomerDetail() {
                 <div className="history-block">
                     <div className="years">Cars</div>
                     <div className="content">
-                        <h4>Vehicle of Adugna</h4>
+                        <h4>Vehicles of {customer.customer_first_name}</h4>
                         <div className="">
                             <div className="text vehicle-box">
-                                no vehicle found
+                                {/* {vehicles.length === 0 ? (
+                                    <p>No vehicles found</p>
+                                ) : (
+                                    vehicles.map(vehicle => (
+                                        <div key={vehicle.vehicle_id}>
+                                            <p>{vehicle.vehicle_model}</p>
+                                            <p>{vehicle.vehicle_license_plate}</p>
+                                        </div>
+                                    ))
+                                )} */}
                             </div>
                             <AddVehicleForm />
                         </div>
@@ -36,14 +117,13 @@ function CustomerDetail() {
                 <div className="history-block">
                     <div className="years">Orders</div>
                     <div className="content">
-                        <h4>Order of </h4>
+                        <h4>Orders of {customer.customer_first_name}</h4>
                         <div className="text">Order will display here</div>
                     </div>
                 </div>
-
             </div>
         </section>
-    )
+    );
 }
 
-export default CustomerDetail
+export default CustomerDetail;

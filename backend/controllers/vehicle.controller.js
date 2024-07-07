@@ -3,8 +3,8 @@ const vehicleService = require('../services/vehicle.service');
 
 // Create the add vehicle controller
 const createVehicle = async (req, res) => {
-    const vehicleData = req.body; // Assuming vehicle data is passed in the request body
-
+    console.log('Incoming request body:', req.body); // Log incoming request
+    const vehicleData = req.body;
     try {
         const insertedId = await vehicleService.createVehicle(vehicleData);
         res.status(201).json({ id: insertedId, message: 'Vehicle created successfully' });
@@ -14,23 +14,16 @@ const createVehicle = async (req, res) => {
     }
 };
 
-// Create the get vehicles by customer ID controller
-async function getVehiclesByCustomerId(req, res, next) {
-    const customerId = req.params.customerId;
-
+// Create the get vehicles 
+const getVehicles = async (req, res) => {
     try {
-        const vehicles = await vehicleService.getVehiclesByCustomerId(customerId);
-        return res.status(200).json({
-            status: "success",
-            data: vehicles
-        });
+        const vehicles = await vehicleService.getVehicles();
+        res.status(200).json(vehicles);
     } catch (error) {
-        console.error('Error fetching vehicles:', error.message);
-        return res.status(500).json({
-            error: "Internal server error"
-        });
+        console.error('Error fetching vehicles:', error);
+        res.status(500).json({ error: 'Failed to fetch vehicles' });
     }
-}
+};
 
 // Create the update vehicle controller
 async function updateVehicle(req, res, next) {
@@ -51,6 +44,6 @@ async function updateVehicle(req, res, next) {
 // Export the createVehicle, getVehiclesByCustomerId, and updateVehicle controllers
 module.exports = {
     createVehicle,
-    getVehiclesByCustomerId,
+    getVehicles,
     updateVehicle
 };

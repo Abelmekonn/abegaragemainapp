@@ -45,8 +45,9 @@ function AddVehicleForm() {
                 window.location.href = '/';
             }, 2000);
         } catch (error) {
-            console.error('Error adding vehicle:', error.message);
-            setServerError('Error adding vehicle. Please try again.');
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 2000);
         }
     };
 
