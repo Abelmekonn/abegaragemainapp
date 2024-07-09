@@ -14,16 +14,48 @@ const createVehicle = async (req, res) => {
     }
 };
 
-// Create the get vehicles 
-const getVehicles = async (req, res) => {
+// Create the get vehicles in controller
+const getVehicles = async (req, res,next) => {
     try {
         const vehicles = await vehicleService.getVehicles();
-        res.status(200).json(vehicles);
+        if(!vehicles) {
+            return res.status(400).json({
+                error: "Failed to get all vehicle!"
+            });
+        } else {
+            return res.status(200).json({
+                status: "success",
+                data: vehicles,
+            });
+        }
     } catch (error) {
         console.error('Error fetching vehicles:', error);
         res.status(500).json({ error: 'Failed to fetch vehicles' });
     }
 };
+
+async function getVehicleByCustomerId(req, res, next) {
+    try {
+        const customerId = req.params.customerId;
+        customerId=parseInt(customerId)
+        const vehicles = await vehicleService.getVehicleByCustomerId(customerId);
+        if (!vehicles || vehicles.length === 0) {
+            return res.status(404).json({
+                error: "No vehicles found for this customer!"
+            });
+        } else {
+            return res.status(200).json({
+                status: "success",
+                data: vehicles,
+            });
+        }
+    } catch (error) {
+        console.error('Error fetching vehicles by customer ID:', error.message);
+        return res.status(500).json({
+            error: "Internal server error"
+        });
+    }
+}
 
 // Create the update vehicle controller
 async function updateVehicle(req, res, next) {
@@ -45,5 +77,6 @@ async function updateVehicle(req, res, next) {
 module.exports = {
     createVehicle,
     getVehicles,
-    updateVehicle
+    updateVehicle,
+    getVehicleByCustomerId
 };

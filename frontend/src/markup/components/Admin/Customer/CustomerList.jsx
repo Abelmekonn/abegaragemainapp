@@ -73,7 +73,7 @@ const CustomersList = () => {
                             <div className="contact-title">
                                 <h2>Customers</h2>
                             </div>
-                            <Table striped bordered hover>
+                            <Table striped bordered hover responsive>
                                 <thead>
                                     <tr>
                                         <th>ID</th>

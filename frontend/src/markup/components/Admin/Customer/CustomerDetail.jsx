@@ -34,7 +34,6 @@ function CustomerDetail() {
                     return;
                 }
                 const data = await response.json();
-                console.log(data)
                 const filteredCustomer = data.data.find(customer => customer.customer_id === parseInt(customerId));
                 setCustomer(filteredCustomer);
             } catch (error) {
@@ -43,7 +42,7 @@ function CustomerDetail() {
                 setApiErrorMessage("Error fetching customers. Please try again later.");
             }
         };
-        
+
         if (customerId) {
             fetchCustomer();
         }
@@ -52,18 +51,28 @@ function CustomerDetail() {
     useEffect(() => {
         const fetchVehicles = async () => {
             try {
-                const fetchedVehicles = await vehicleService.getVehicles(token);
-                setVehicles(fetchedVehicles);
-                console.log(vehicles)
+                const fetchedResponse = await vehicleService.getVehicles(token);
+                if (!fetchedResponse.ok) {
+                    throw new Error(`HTTP error! Status: ${fetchedResponse.status}`);
+                }
+                const fetchedData = await fetchedResponse.json();
+                console.log('Fetched vehicles:', fetchedData); // Log fetched data
+                if (Array.isArray(fetchedData)) {
+                    setVehicles(fetchedData);
+                } else {
+                    console.error('Unexpected data format:', fetchedData);
+                    setVehicles([]); // Or handle the unexpected data format appropriately
+                }
             } catch (error) {
-                console.error('Error fetching vehicles:', error);
-                
+                console.error('Error fetching vehicles:', error.message);
             }
         };
+        
 
-        fetchVehicles();
-    }, []);
-
+        if (customerId) {
+            fetchVehicles();
+        }
+    }, [customerId, token]);
 
     if (apiError) {
         return <div>{apiErrorMessage}</div>;
@@ -86,7 +95,7 @@ function CustomerDetail() {
                             <div className="customer-info"><h5>Active Customer</h5><p>: {customer.active_customer_status ? 'Yes' : 'No'}</p></div>
                             <div className="customer-info"><h5>Edit customer info</h5><p>: <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
                                 <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                                <path fillRule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                                <path fillRule="evenodd" d="M1 13.5A1.5.5 0 0 0 2.5 15h11a1.5.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5.5 0 0 0 1 2.5z" />
                             </svg>
                             </p>
                             </div>
@@ -99,16 +108,16 @@ function CustomerDetail() {
                         <h4>Vehicles of {customer.customer_first_name}</h4>
                         <div className="">
                             <div className="text vehicle-box">
-                                {/* {vehicles.length === 0 ? (
+                                {vehicles.length === 0 ? (
                                     <p>No vehicles found</p>
                                 ) : (
-                                    vehicles.map(vehicle => (
+                                    vehicles.map((vehicle) => (
                                         <div key={vehicle.vehicle_id}>
                                             <p>{vehicle.vehicle_model}</p>
                                             <p>{vehicle.vehicle_license_plate}</p>
                                         </div>
                                     ))
-                                )} */}
+                                )}
                             </div>
                             <AddVehicleForm />
                         </div>

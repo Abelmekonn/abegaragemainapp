@@ -23,28 +23,19 @@ const createVehicle = async (vehicleData, loggedInEmployeeToken) => {
         throw error; // Rethrow error for component to handle
     }
 };
-
 const getVehicles = async (token) => {
     const requestOptions = {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json', 
             'x-access-token': token
         }
     };
 
-    try {
+    
         const response = await fetch(`${api_url}/api/all-vehicles`, requestOptions);
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        return response.json(); // Parse JSON response
-    } catch (error) {
-        console.error('Error in getVehicles:', error.message);
-        throw error; // Rethrow error for component to handle
-    }
+        return response; // Parse JSON response
 };
 
 const updateVehicle = async (vehicleData, token) => {
@@ -71,10 +62,34 @@ const updateVehicle = async (vehicleData, token) => {
     }
 };
 
+const getVehicleByCustomerId = async (token, customerId) => {
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'x-access-token': token
+        }
+    };
+
+    try {
+        const response = await fetch(`${api_url}/api/vehicle/${customerId}`, requestOptions);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        return response.json(); // Parse JSON response
+    } catch (error) {
+        console.error('Error in getVehicleByCustomerId:', error.message);
+        throw error; // Rethrow error for component to handle
+    }
+};
+
 const vehicleService = {
     createVehicle,
     getVehicles,
-    updateVehicle // Added updateVehicle to the exported service
+    updateVehicle,
+    getVehicleByCustomerId // Added getVehicleByCustomerId to the exported service
 };
 
 export default vehicleService;
