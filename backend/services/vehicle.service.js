@@ -28,7 +28,7 @@ const getVehicles = async () => {
         console.log('Executing query:', query);
         const result = await conn.query(query);
         console.log(result);
-        return result.rows; // Return the entire array of rows to the calling function
+        return result; // Return the entire array of rows to the calling function
     } catch (error) {
         console.error('Error fetching vehicles:', error);
         throw error;

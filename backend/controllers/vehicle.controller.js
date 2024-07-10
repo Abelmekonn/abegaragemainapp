@@ -15,29 +15,31 @@ const createVehicle = async (req, res) => {
 };
 
 // Create the get vehicles in controller
-const getVehicles = async (req, res,next) => {
-    try {
-        const vehicles = await vehicleService.getVehicles();
-        if(!vehicles) {
-            return res.status(400).json({
-                error: "Failed to get all vehicle!"
-            });
-        } else {
-            return res.status(200).json({
-                status: "success",
-                data: vehicles,
-            });
-        }
-    } catch (error) {
-        console.error('Error fetching vehicles:', error);
-        res.status(500).json({ error: 'Failed to fetch vehicles' });
+const getVehicles = async (req, res, next) => {
+  try {
+    const vehicles = await vehicleService.getVehicles(); // Call the getVehicles function from vehicleService
+    console.log(vehicles)
+    if (!vehicles || vehicles.length === 0) {
+      return res.status(200).json({
+        status: "success",
+        data: [], // Return an empty array
+      });
+    } else {
+      return res.status(200).json({
+        status: "success",
+        data: vehicles,
+      });
     }
+  } catch (error) {
+    console.error('Error fetching vehicles:', error);
+    res.status(500).json({ error: 'Failed to fetch vehicles' });
+  }
 };
 
 async function getVehicleByCustomerId(req, res, next) {
     try {
         const customerId = req.params.customerId;
-        customerId=parseInt(customerId)
+        customerId = parseInt(customerId)
         const vehicles = await vehicleService.getVehicleByCustomerId(customerId);
         if (!vehicles || vehicles.length === 0) {
             return res.status(404).json({

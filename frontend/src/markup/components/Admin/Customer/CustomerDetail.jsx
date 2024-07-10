@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
 import { useAuth } from '../../../../contexts/AuthContext';
+import { Table, Button } from 'react-bootstrap';
 import AddVehicleForm from '../Vehicle/AddVehicleForm';
 import customerService from '../../../../services/customer.service';
 import vehicleService from '../../../../services/vehicle.service';
@@ -51,25 +52,20 @@ function CustomerDetail() {
     useEffect(() => {
         const fetchVehicles = async () => {
             try {
-                const fetchedResponse = await vehicleService.getVehicles(token);
-                if (!fetchedResponse.ok) {
-                    throw new Error(`HTTP error! Status: ${fetchedResponse.status}`);
+                const response = await vehicleService.getVehicles(token, customerId);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
                 }
-                const fetchedData = await fetchedResponse.json();
-                console.log('Fetched vehicles:', fetchedData); // Log fetched data
-                if (Array.isArray(fetchedData)) {
-                    setVehicles(fetchedData);
-                } else {
-                    console.error('Unexpected data format:', fetchedData);
-                    setVehicles([]); // Or handle the unexpected data format appropriately
-                }
+                const data = await response.json();
+                const filteredVehicles = data.data.filter(vehicle => vehicle.customer_id === parseInt(customerId));
+                setVehicles(filteredVehicles);
             } catch (error) {
                 console.error('Error fetching vehicles:', error.message);
+                setVehicles([]); // Initialize vehicles as an empty array on error
             }
         };
-        
 
-        if (customerId) {
+        if (customerId && token) {
             fetchVehicles();
         }
     }, [customerId, token]);
@@ -111,12 +107,37 @@ function CustomerDetail() {
                                 {vehicles.length === 0 ? (
                                     <p>No vehicles found</p>
                                 ) : (
-                                    vehicles.map((vehicle) => (
-                                        <div key={vehicle.vehicle_id}>
-                                            <p>{vehicle.vehicle_model}</p>
-                                            <p>{vehicle.vehicle_license_plate}</p>
-                                        </div>
-                                    ))
+                                    <Table striped bordered hover responsive>
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Year</th>
+                                                <th>Make</th>
+                                                <th>Model</th>
+                                                <th>Type</th>
+                                                <th>Tag</th>
+                                                <th>Serial</th>
+                                                <th>Color</th>
+                                                <th>Mileage</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {vehicles.map((vehicle, index) => (
+                                                <tr key={index}>
+                                                    <td>{vehicle.vehicle_id}</td>
+                                                    <td>{vehicle.vehicle_year}</td>
+                                                    <td>{vehicle.vehicle_make}</td>
+                                                    <td>{vehicle.vehicle_model}</td>
+                                                    <td>{vehicle.vehicle_type}</td>
+                                                    <td>{vehicle.vehicle_tag}</td>
+                                                    <td>{vehicle.vehicle_serial}</td>
+                                                    <td>{vehicle.vehicle_color}</td>
+                                                    <td>{vehicle.vehicle_mileage}</td>
+
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </Table>
                                 )}
                             </div>
                             <AddVehicleForm />
