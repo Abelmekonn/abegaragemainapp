@@ -133,7 +133,6 @@ function CustomerDetail() {
                                                     <td>{vehicle.vehicle_serial}</td>
                                                     <td>{vehicle.vehicle_color}</td>
                                                     <td>{vehicle.vehicle_mileage}</td>
-
                                                 </tr>
                                             ))}
                                         </tbody>
