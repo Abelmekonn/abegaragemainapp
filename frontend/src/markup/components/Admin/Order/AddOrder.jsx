@@ -24,9 +24,17 @@ function AddOrder() {
   return (
     <section className='contact-section container'>
       <div className='progress d-flex justify-content-between'>
-        <div className='col-5 d-flex'> <p className='circle p-2'>Add user</p> <p className='circle-1'></p></div>
-        <div className='col-5'> <p className='circle p-2'>Add Vehicle</p><p className='circle-1'></p></div>
-        <div className='col-2'> <p className='circle p-2'>Add Service</p></div>
+        <div className='col-5 d-flex'>
+          <p className='circle p-2'>Add user</p>
+          <p className={selectedCustomerId ? 'circle-1 ' : 'd-none'}></p>
+        </div>
+        <div className='col-5'>
+          <p className='circle p-2'>Add Vehicle</p>
+          <p className={selectedVehicleId  ? 'circle-1 ' : 'd-none'}></p>
+        </div>
+        <div className='col-2'>
+          <p className='circle p-2'>Add Service</p>
+        </div>
       </div>
       <div className='container'>
         <div className="contact-title">

@@ -4,18 +4,28 @@ import { Table, Button } from 'react-bootstrap';
 import customerService from '../../../../services/customer.service';
 import vehicleService from '../../../../services/vehicle.service';
 import serviceService from '../../../../services/service.service';
+import orderService from '../../../../services/order.service';
 
 function SelectService({ customerId, vehicleId, onSelectService }) {
     const [service, setService] = useState([])
     const [customer, setCustomer] = useState(null);
     const [vehicles, setVehicles] = useState([]);
+    const [additionalRequest,setAdditionalRequest]=useState('');
+    const [price , setPrice]=useState('')
+    const [selectedServices, setSelectedServices] = useState([]);
     const [apiErrorMessage, setApiErrorMessage] = useState(null);
     const [apiError, setApiError] = useState(false);
     const { employee } = useAuth();
     let token = null;
+    let employee_id=null
     if (employee) {
         token = employee.employee_token;
+        employee_id=employee.employee_id
     }
+    console.log(`${employee_id} employee_id`)
+    console.log(`${customerId} customer` )
+    console.log(`${vehicleId} vehicle` )
+
 
 
     useEffect(() => {
@@ -88,6 +98,50 @@ function SelectService({ customerId, vehicleId, onSelectService }) {
 
         fetchServices();
     }, [customerId, vehicleId]);
+    const handleServiceSelection = (serviceId) => {
+        const updatedServices = selectedServices.includes(serviceId)
+            ? selectedServices.filter(id => id !== serviceId)
+            : [...selectedServices, serviceId];
+        setSelectedServices(updatedServices);
+        onSelectService(updatedServices);
+    };
+    console.log(selectedServices)
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const orderData = {
+            employeeId: employee_id,
+            customerId,
+            vehicleId,
+            activeOrder: true,
+            orderTotalPrice: price,
+            additionalRequest,
+            notesForInternalUse: '',
+            notesForCustomer: '',
+            additionalRequestsCompleted: false,
+            serviceIds: selectedServices,
+            serviceCompleted: false,
+            initialStatus: 1 // Assuming 1 represents the initial status of the order
+        };
+    
+        try {
+            const response = await orderService.createOrder(orderData, token);
+            if (response.ok) {
+                const data = await response.json();
+                alert('Order created successfully!');
+                // Handle success (e.g., redirect, clear form, etc.)
+            } else {
+                const errorData = await response.json();
+                setApiErrorMessage(errorData.message);
+                setApiError(true);
+            }
+        } catch (error) {
+            console.error('Error creating order:', error);
+            setApiErrorMessage('Error creating order. Please try again later.');
+            setApiError(true);
+        }
+    };
+    
 
 
     return (
@@ -152,7 +206,11 @@ function SelectService({ customerId, vehicleId, onSelectService }) {
                             <div className='d-flex justify-content-between'>
                                 <p className='col-10 '>{service.service_description}</p>
                                 <div className="edit col-1 d-flex justify-content-between">
-                                    <input type="checkbox" className='bordered' style={{ width: '25px' }} />
+                                    <input 
+                                    type="checkbox" className='bordered' style={{ width: '25px' }}
+                                    checked={selectedServices.includes(service.service_id)}
+                                    onChange={() => handleServiceSelection(service.service_id)} 
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -168,13 +226,14 @@ function SelectService({ customerId, vehicleId, onSelectService }) {
                         <div className="form-column col-lg-7">
                             <div className="inner-column">
                                 <div className="contact-form">
-                                    <form >
+                                    <form onSubmit={handleSubmit}>
                                         <div className="row clearfix">
                                             <div className="form-group col-md-12">
                                                 <textarea
                                                     name="description"
                                                     placeholder="Additional request"
-
+                                                    value={additionalRequest}
+                                                onChange={(e) => setAdditionalRequest(e.target.value)} 
                                                 />
                                             </div>
                                             <div className="form-group col-md-12">
@@ -182,10 +241,10 @@ function SelectService({ customerId, vehicleId, onSelectService }) {
                                                     type="text"
                                                     name="service_name"
                                                     placeholder="price"
-
+                                                    value={price}
+                                                onChange={(e) => setPrice(e.target.value)} 
                                                 />
                                             </div>
-
                                             <div className="form-group col-md-12">
                                                 <button className="theme-btn btn-style-one" type="submit" data-loading-text="Please wait..."><span>Add service</span></button>
                                             </div>
