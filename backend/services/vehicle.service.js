@@ -25,9 +25,7 @@ const createVehicle = async (vehicleData) => {
 const getVehicles = async () => {
     const query = `SELECT * FROM customer_vehicle_info ORDER BY customer_id`;
     try {
-        console.log('Executing query:', query);
         const result = await conn.query(query);
-        console.log(result);
         return result; // Return the entire array of rows to the calling function
     } catch (error) {
         console.error('Error fetching vehicles:', error);

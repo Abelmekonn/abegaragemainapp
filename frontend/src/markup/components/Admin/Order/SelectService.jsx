@@ -109,15 +109,15 @@ function SelectService({ customerId, vehicleId, onSelectService }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const orderData = {
+        const order = {
             employeeId: employee_id,
             customerId,
             vehicleId,
             activeOrder: true,
             orderTotalPrice: price,
             additionalRequest,
-            notesForInternalUse: '',
-            notesForCustomer: '',
+            notesForInternalUse: 'ferfe',
+            notesForCustomer: 'erfeceve',
             additionalRequestsCompleted: false,
             serviceIds: selectedServices,
             serviceCompleted: false,
@@ -125,7 +125,7 @@ function SelectService({ customerId, vehicleId, onSelectService }) {
         };
     
         try {
-            const response = await orderService.createOrder(orderData, token);
+            const response = await orderService.createOrder(order, token);
             if (response.ok) {
                 const data = await response.json();
                 alert('Order created successfully!');
