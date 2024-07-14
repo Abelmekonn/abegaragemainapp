@@ -2,7 +2,7 @@ import React from 'react';
 // Import the Link component from react-router-dom 
 import { Link } from 'react-router-dom'
 // Import the logo image 
-import logo from '../../../assets/images/logo.png';
+import logo from '../../../assets/images/custom/logo.png';
 // Import the login service to access the logout function
 import { LogOut } from '../../../services/login.service';
 // Import the custom context hook 
@@ -20,6 +20,7 @@ function Header(props) {
         LogOut();
         // Set the isLogged state to false 
         setIsLogged(false);
+        window.location.reload();
     }
 
     return (
@@ -113,7 +114,7 @@ function Header(props) {
                                                     {isAdmin ? (
                                                         <li><a href="/Admin">Admin</a></li>
                                                     ) : (
-                                                        <li></li>
+                                                        <li><a href="">Order</a></li>
                                                     )}
                                                 </ul>
                                             </div>

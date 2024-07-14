@@ -40,7 +40,7 @@ const getVehicleByCustomerId = async (req, res) => {
     try {
         console.log(`Executing query: ${query} with customerId: ${customerId}`);
         const [rows] = await conn.query(query, [customerId]);
-        console.log('Query result:', rows);
+        
 
         if (!rows || rows.length === 0) {
             return res.status(404).json({ message: 'No vehicles found for this customer' });

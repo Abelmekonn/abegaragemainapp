@@ -60,14 +60,14 @@ async function createOrder(order) {
 
 async function getOrderById(orderId) {
     try {
-        const query = `SELECT o.id, o.employee_id, o.customer_id, o.vehicle_id, o.active_order, o.order_hash,
+        const query = `SELECT o.order_id, o.employee_id, o.customer_id, o.vehicle_id, o.active_order, o.order_hash,
                       oi.order_total_price, oi.additional_request, oi.notes_for_internal_use, oi.notes_for_customer, oi.additional_requests_completed,
                       os.service_id, os.service_completed,
                       ost.order_status
                      FROM orders o
-                     LEFT JOIN order_info oi ON o.id = oi.order_id
-                     LEFT JOIN order_services os ON o.id = os.order_id
-                     LEFT JOIN order_status ost ON o.id = ost.order_id
+                     LEFT JOIN order_info oi ON o.order_id= oi.order_id
+                     LEFT JOIN order_services os ON o.order_id = os.order_id
+                     LEFT JOIN order_status ost ON o.order_id = ost.order_id
                      WHERE o.id = ?`;
 
         const results = await conn.query(query, [orderId]);
@@ -102,47 +102,33 @@ async function getOrderById(orderId) {
         throw new Error('Error getting order by ID');
     }
 }
-async function getAllOrders() {
+const getAllOrders = async (token) => {
+    const query = `
+      SELECT o.order_id, o.employee_id, o.customer_id, o.vehicle_id, o.order_date ,o.active_order, o.order_hash,
+      oi.order_total_price, oi.additional_request, oi.notes_for_internal_use, oi.notes_for_customer, oi.additional_requests_completed,
+      GROUP_CONCAT(os.service_id ORDER BY os.service_id) AS service_ids,
+      GROUP_CONCAT(os.order_service_id ORDER BY os.order_service_id) AS order_service_ids,
+      os.service_completed,
+      ost.order_status
+      FROM orders o
+      INNER JOIN order_info oi ON o.order_id = oi.order_id
+      INNER JOIN order_services os ON o.order_id = os.order_id
+      INNER JOIN order_status ost ON o.order_id = ost.order_id
+      GROUP BY o.order_id
+      ORDER BY o.order_id DESC
+      LIMIT 10;
+    `;
+  
     try {
-        const query = `SELECT o.id, o.employee_id, o.customer_id, o.vehicle_id, o.active_order, o.order_hash,
-                      oi.order_total_price, oi.additional_request, oi.notes_for_internal_use, oi.notes_for_customer, oi.additional_requests_completed,
-                      os.service_id, os.service_completed,
-                      ost.order_status
-                     FROM orders o
-                     LEFT JOIN order_info oi ON o.id = oi.order_id
-                     LEFT JOIN order_services os ON o.id = os.order_id
-                     LEFT JOIN order_status ost ON o.id = ost.order_id
-                     ORDER BY o.id DESC`;
-
-        const results = await conn.query(query);
-
-        const orders = results.map((row) => ({
-            id: row.id,
-            employeeId: row.employee_id,
-            customerId: row.customer_id,
-            vehicleId: row.vehicle_id,
-            activeOrder: row.active_order,
-            orderHash: row.order_hash,
-            orderTotalPrice: row.order_total_price,
-            additionalRequest: row.additional_request,
-            notesForInternalUse: row.notes_for_internal_use,
-            notesForCustomer: row.notes_for_customer,
-            additionalRequestsCompleted: row.additional_requests_completed,
-            services: [
-                {
-                    serviceId: row.service_id,
-                    serviceCompleted: row.service_completed,
-                },
-            ],
-            orderStatus: row.order_status,
-        }));
-
-        return orders;
+      const rows = await conn.query(query);
+      console.log(rows)
+      return rows; // Return the array of orders
     } catch (error) {
-        console.error('Error getting all orders:', error);
-        throw new Error('Error getting all orders');
+      console.error('Error getting all orders:', error.message);
+      throw error;
     }
-}
+  };
+
 module.exports = {
     createOrder,
     getAllOrders,

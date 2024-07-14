@@ -389,3 +389,26 @@ input:disabled {
     background-color: #EE0D09;
     margin-top: 5%;
 }
+.status{
+    color: #000;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 8px;
+    text-align: center;
+    padding: 9px  ;
+}
+.status-pending{
+    background-color: rgb(158, 158, 150);
+
+}
+.status-in-progress{
+    background-color: rgb(221, 221, 47);
+
+}
+.status-completed{
+    background-color: rgb(9, 184, 9);
+}
+.fs{
+    color: #3a3838;
+    font-weight: 400;
+}

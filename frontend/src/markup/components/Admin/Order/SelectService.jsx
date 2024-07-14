@@ -121,7 +121,7 @@ function SelectService({ customerId, vehicleId, onSelectService }) {
             additionalRequestsCompleted: false,
             serviceIds: selectedServices,
             serviceCompleted: false,
-            initialStatus: 1 // Assuming 1 represents the initial status of the order
+            initialStatus: false // Assuming 1 represents the initial status of the order
         };
     
         try {

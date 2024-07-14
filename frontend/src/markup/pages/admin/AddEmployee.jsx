@@ -4,7 +4,7 @@ import AddEmployeeForm from '../../components/Admin/AddEmployeeForm/AddEmployeeF
 
 function AddEmployee() {
   return (
-    <div className=" admin-pages">
+    <div className="container-fluid admin-pages">
       <div className="row">
         <div className="col-md-3 admin-left-side">
           <AdminMenu />

@@ -6,7 +6,6 @@ const bcrypt = require('bcrypt');
 async function checkIfEmployeeExists(email) {
     const query = "SELECT * FROM employee WHERE employee_email = ? ";
     const rows = await conn.query(query, [email]);
-    console.log(rows);
     if (rows.length > 0) {
         return true;
     }
@@ -24,7 +23,6 @@ async function createEmployee(employee) {
         // Insert the email in to the employee table  
         const query = "INSERT INTO employee (employee_email, active_employee) VALUES (?, ?)";
         const rows = await conn.query(query, [employee.employee_email, employee.active_employee]);
-        console.log(rows);
         if (rows.affectedRows !== 1) {
             return false;
         }
@@ -55,7 +53,6 @@ async function getEmployeeByEmail(employee_email) {
         throw new Error('Email parameter is undefined');
     }
 
-    console.log(`Querying for employee with email: ${employee_email}`);
     const query = `
         SELECT * FROM employee 
         INNER JOIN employee_info ON employee.employee_id = employee_info.employee_id 
@@ -64,7 +61,6 @@ async function getEmployeeByEmail(employee_email) {
         WHERE employee.employee_email = ?
     `;
     const rows = await conn.query(query, [employee_email]);
-    console.log('Query result:', rows);
     return rows;
 }
 // A function to get all employees

@@ -23,6 +23,8 @@ const createOrder = async (order, token) => {
     }
 };
 
+// orderService.js
+
 const getAllOrders = async (token) => {
     const requestOptions = {
         method: 'GET',
@@ -33,19 +35,20 @@ const getAllOrders = async (token) => {
     };
     try {
         const response = await fetch(`${api_url}/api/orders`, requestOptions);
-
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-
-        return response.json(); // Parse JSON response
+        const data = await response.json(); // Parse JSON response
+        return data; // Return the array of orders
     } catch (error) {
-        console.error('Error in get all orders:', error.message);
+        console.error('Error in getAllOrders:', error.message);
         throw error; // Rethrow error for component to handle
     }
 };
 
-const getOrderById = async (id, token) => {
+
+
+const getOrderById = async (orderId, token) => {
     const requestOptions = {
         method: 'GET',
         headers: {
@@ -54,13 +57,13 @@ const getOrderById = async (id, token) => {
         }
     };
     try {
-        const response = await fetch(`${api_url}/api/order/${id}`, requestOptions);
+        const response = await fetch(`${api_url}/api/order/${orderId}`, requestOptions);
 
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        return response.json(); // Parse JSON response
+        return response; // Parse JSON response
     } catch (error) {
         console.error('Error in get order by id:', error.message);
         throw error; // Rethrow error for component to handle

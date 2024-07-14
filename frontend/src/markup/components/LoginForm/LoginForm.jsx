@@ -32,6 +32,7 @@ function LoginForm() {
             } else {
                 setEmailError('');
             }
+            
         }
 
         if (!password || password.length < 6) {
@@ -56,9 +57,11 @@ function LoginForm() {
             if (data.status === 'success') {
                 if (data.data.employee_token) {
                     localStorage.setItem('employee', JSON.stringify(data.data));
+                    window.location.reload();
                 }
                 if (location.pathname === '/login') {
                     navigate('/');
+                    window.location.reload();
                 } else {
                     window.location.reload();
                 }
