@@ -82,7 +82,7 @@ function AddCustomerForm() {
         <section className="contact-section">
             <div className="auto-container">
                 <div className="contact-title">
-                    <h2>Add a new employee</h2>
+                    <h2>Add a new customer</h2>
                 </div>
                 <div className="row clearfix">
                     <div className="form-column col-lg-7">

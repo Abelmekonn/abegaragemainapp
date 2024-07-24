@@ -94,7 +94,7 @@ function OrderList() {
     const fetchEmployees = async (employeeIds) => {
         try {
             const response = await employeeService.getAllEmployees(token);
-            if (!response.ok) {
+            if (!response.ok) { 
                 setApiError(true);
                 if (response.status === 401) {
                     setApiErrorMessage("Please login again");

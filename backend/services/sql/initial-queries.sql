@@ -1,8 +1,7 @@
--- Customers tables  
 CREATE TABLE IF NOT EXISTS `customer_identifier` (
   `customer_id` int(11) NOT NULL AUTO_INCREMENT,
   `customer_email` varchar(255) NOT NULL,
-  `customer_phone_number` varchar(255) NOT NULL,
+  `customer_phone_number` varchar(255) DEFAULT NULL,
   `customer_added_date` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `customer_hash` varchar(255) NOT NULL,
   PRIMARY KEY (customer_id),
@@ -19,6 +18,15 @@ CREATE TABLE IF NOT EXISTS `customer_info` (
   FOREIGN KEY (customer_id) REFERENCES customer_identifier(customer_id)
 ) ENGINE=InnoDB;
 
+CREATE TABLE IF NOT EXISTS `customer_pass` (
+  `customer_pass_id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` int(11) NOT NULL,
+  `customer_password_hashed` varchar(255) NOT NULL,
+  PRIMARY KEY (customer_pass_id),
+  FOREIGN KEY (customer_id) REFERENCES customer_identifier(customer_id)
+) ENGINE=InnoDB;
+
+-- End of Customers tables
 CREATE TABLE IF NOT EXISTS `customer_vehicle_info` (
   `vehicle_id` int(11) NOT NULL AUTO_INCREMENT,
   `customer_id` int(11) NOT NULL, 
@@ -133,6 +141,16 @@ CREATE TABLE IF NOT EXISTS `order_status` (
   FOREIGN KEY (order_id) REFERENCES orders(order_id)
 ) ENGINE=InnoDB;
 
+
+CREATE TABLE IF NOT EXISTS `payment` (
+  `payment_id` INT NOT NULL AUTO_INCREMENT,
+  `customer_id` INT NOT NULL,
+  `payment_number` INT NOT NULL,
+  `payment_status` TINYINT(1) NOT NULL,
+  `payment_screenshot` VARCHAR(255),
+  PRIMARY KEY (`payment_id`),
+  FOREIGN KEY (`customer_id`) REFERENCES `customer_identifier`(`customer_id`)
+) ENGINE=InnoDB;
 -- Add the roles to the database 
 INSERT INTO company_roles (company_role_name)
 VALUES ('Employee'), ('Manager'), ('Admin');
