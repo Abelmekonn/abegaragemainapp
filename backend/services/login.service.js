@@ -14,6 +14,7 @@ async function checkIfEmailExists(email) {
         console.log('Customer Rows:', customerRows);
 
         if (customerRows && customerRows.length > 0) {
+            console.log('Customer found:', customerRows[0]);
             return {
                 exists: true,
                 type: 'customer',
@@ -25,6 +26,7 @@ async function checkIfEmailExists(email) {
         console.log('Employee Rows:', employeeRows);
 
         if (employeeRows && employeeRows.length > 0) {
+            console.log('Employee found:', employeeRows[0]);
             return {
                 exists: true,
                 type: 'employee',
@@ -32,6 +34,7 @@ async function checkIfEmailExists(email) {
             };
         }
 
+        console.log('No customer or employee found');
         return {
             exists: false,
             type: null,
@@ -46,8 +49,9 @@ async function checkIfEmailExists(email) {
 async function logIn({ email, password }) {
     try {
         const { exists, type, data } = await checkIfEmailExists(email);
-        console.log(exists)
-        if (exists) {
+        console.log({ exists, type, data });  // Log the result
+
+        if (!exists) {
             return {
                 status: 'fail',
                 message: 'User not found',
@@ -98,6 +102,7 @@ async function logIn({ email, password }) {
         throw error;
     }
 }
+
 
 module.exports = {
     logIn

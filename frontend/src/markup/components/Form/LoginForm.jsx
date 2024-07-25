@@ -55,7 +55,7 @@ function LoginForm() {
             const data = await LogIn(formData);
 
             if (data.status === 'success') {
-                if (data.data.employee_token) {
+                if (data.data.token) {
                     localStorage.setItem('employee', JSON.stringify(data.data));
                     window.location.reload();
                 }

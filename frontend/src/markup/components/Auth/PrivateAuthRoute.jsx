@@ -12,10 +12,10 @@ const PrivateAuthRoute = ({ roles, children }) => {
         const checkAuth = async () => {
             try {
                 const response = await getAuth();
-                if (response.employee_token) {
+                if (response.token) {
                     setIsLogged(true);
                     // eslint-disable-next-line react/prop-types
-                    if (roles && roles.length > 0 && roles.includes(response.employee_role)) {
+                    if (roles && roles.length > 0 && roles.includes(response.role)) {
                         setIsAuthorized(true);
                     }
                 }

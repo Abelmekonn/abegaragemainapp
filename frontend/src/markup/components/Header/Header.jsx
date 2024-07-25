@@ -35,8 +35,8 @@ function Header(props) {
                             </div>
                             <div className="right-column">
                                 {isLogged ? (
-                                    <div className="link-btn">
-                                        <div className="phone-number"><strong>Welcome {employee?.employee_first_name}</strong></div>
+                                    <div className="link-btn mx-4">
+                                        <div className="phone-number"><strong>Welcome: {employee.firstName}</strong></div>
                                     </div>
                                 ) : (
                                     <div className="phone-number">Schedule Appointment: <strong>1800 456 7890   </strong> </div>

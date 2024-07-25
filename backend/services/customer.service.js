@@ -93,7 +93,7 @@ async function getCustomerByEmail(customer_email) {
     `;
     
     try {
-        const [rows] = await conn.query(query, [customer_email]);
+        const rows = await conn.query(query, [customer_email]);
         return rows;
     } catch (error) {
         console.error('Error fetching customer by email:', error);

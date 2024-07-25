@@ -22,9 +22,9 @@ export const AuthProvider = ({ children }) => {
     const fetchAuth = async () => {
       try {
         const response = await getAuth();
-        if (response?.employee_token) {
+        if (response?.token) {
           setIsLogged(true);
-          if (response.employee_role === 3) { // 3 is the employee_role for admin
+          if (response.role === 3) { // 3 is the employee_role for admin
             setIsAdmin(true);
           }
           setEmployee(response);
