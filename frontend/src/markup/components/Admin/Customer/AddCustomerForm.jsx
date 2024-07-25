@@ -77,7 +77,7 @@ function AddCustomerForm() {
             setServerError('Error creating employee. Please try again.');
         }
     };
-
+    
     return (
         <section className="contact-section">
             <div className="auto-container">
@@ -116,7 +116,6 @@ function AddCustomerForm() {
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </section>

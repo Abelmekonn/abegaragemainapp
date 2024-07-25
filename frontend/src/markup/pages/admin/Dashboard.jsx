@@ -1,7 +1,7 @@
 import React from 'react'
 import { useAuth } from "../../../contexts/AuthContext";
 // Import the login form component 
-import LoginForm from '../../components/LoginForm/LoginForm';
+import LoginForm from '../../components/Form/LoginForm';
 // Import the admin menu component
 import AdminMenu from "../../components/Admin/AdminMenu/AdminMenu";
 

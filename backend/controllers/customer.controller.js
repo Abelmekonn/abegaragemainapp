@@ -2,35 +2,41 @@
 const customerService = require('../services/customer.service');
 
 // Create the add customer controller
-async function createCustomer(req, res, next) {
-    // Check if customer email already exists in the database
-    const customerExists = await customerService.checkIfCustomerExists(req.body.customer_email);
+async function createCustomer(req, res) {
+    const { customer_email, customer_phone_number, customer_first_name, customer_last_name, customer_password, active_customer_status } = req.body;
 
-    // If customer exists, send a response to the client
-    if (customerExists) {
-        res.status(400).json({
-            error: "This email address is already associated with another customer!"
-        });
-    } else {
-        try {
-            const customerData = req.body;
-            // Create the customer
-            const customer = await customerService.createCustomer(customerData);
-            if (!customer) {
-                res.status(400).json({
-                    error: "Failed to add the customer!"
-                });
-            } else {
-                res.status(200).json({
-                    status: "customer created",
-                });
-            }
-        } catch (error) {
-            console.log(error);
-            res.status(400).json({
-                error: "Something went wrong!"
-            });
+    // Validate request body
+    if (!customer_email || !customer_first_name || !customer_last_name || !customer_password) {
+        return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    try {
+        console.log('Request to create customer received with email:', customer_email);
+
+        // Check if the customer already exists
+        const customerExists = await customerService.checkIfCustomerExists(customer_email);
+        if (customerExists) {
+            return res.status(400).json({ error: 'Customer with this email already exists' });
         }
+
+        // Create a new customer
+        const newCustomer = await customerService.createCustomer({
+            customer_email,
+            customer_phone_number,
+            customer_first_name,
+            customer_last_name,
+            customer_password,
+            active_customer_status,
+        });
+
+        if (!newCustomer) {
+            return res.status(500).json({ error: 'Failed to create customer' });
+        }
+
+        res.status(201).json(newCustomer);
+    } catch (error) {
+        console.error('Error creating customer:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 }
 

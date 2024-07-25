@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import OrderList from "../../components/Admin/Order/OrderList";
 import { useAuth } from "../../../contexts/AuthContext";
-import LoginForm from "../../components/LoginForm/LoginForm";
+import LoginForm from "../../components/Form/LoginForm";
 import AdminMenu from "../../components/Admin/AdminMenu/AdminMenu";
 import OrderDetail from "../../components/Admin/Order/OrderDetail";
 

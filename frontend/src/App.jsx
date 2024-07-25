@@ -32,6 +32,7 @@ import AdminService from './markup/pages/admin/AdminService'
 import AddNewOrder from './markup/pages/admin/AddNewOrder'
 // import private route wrapper 
 import PrivateAuthRoute from './markup/components/Auth/PrivateAuthRoute'
+import Register from './markup/pages/Register'
 
 function App() {
   const scrollToTop = () => {
@@ -51,6 +52,7 @@ function App() {
         <Route path="/services" element={<Services />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
+        <Route path='/register' element={<Register />} />
         
         {/* Admin route */}
         <Route path="/admin" element={<PrivateAuthRoute roles={[2, 3]}><Dashboard /></PrivateAuthRoute>} />

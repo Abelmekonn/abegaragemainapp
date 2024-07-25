@@ -3,6 +3,9 @@ const api_url = import.meta.env.VITE_API_URL;
 const createCustomer = async (formData) => {
     const requestOptions = {
         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
         body: JSON.stringify(formData)
     };
 
@@ -10,7 +13,8 @@ const createCustomer = async (formData) => {
         const response = await fetch(`${api_url}/api/customer`, requestOptions);
 
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            const errorData = await response.json();
+            throw new Error(errorData.error || `HTTP error! Status: ${response.status}`);
         }
 
         return response.json(); // Parse JSON response
@@ -18,7 +22,7 @@ const createCustomer = async (formData) => {
         console.error('Error in createCustomer:', error.message);
         throw error; // Rethrow error for component to handle
     }
-};
+}
 
 const getAllCustomers = async (token) => {
     const requestOptions = {

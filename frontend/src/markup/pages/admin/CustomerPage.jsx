@@ -1,6 +1,6 @@
 import React from 'react'
 import { useAuth } from "../../../contexts/AuthContext";
-import LoginForm from '../../components/LoginForm/LoginForm';
+import LoginForm from '../../components/Form/LoginForm';
 import AdminMenu from "../../components/Admin/AdminMenu/AdminMenu";
 import CustomerDetail from '../../components/Admin/Customer/CustomerDetail'
 function CustomerPage() {

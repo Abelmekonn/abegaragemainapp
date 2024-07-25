@@ -14,33 +14,35 @@ async function logIn(req, res, next) {
             });
         }
 
-        const employeeData = { email, password };
-        const employee = await loginService.logIn(employeeData);
+        const user = await loginService.logIn({ email, password });
 
-        if (employee.status === "fail") {
+        if (user.status === "fail") {
             return res.status(403).json({
-                status: employee.status,
-                message: employee.message,
+                status: user.status,
+                message: user.message,
             });
         }
 
         const payload = {
-            employee_id: employee.data.employee_id,
-            employee_email: employee.data.employee_email,
-            employee_role: employee.data.company_role_id,
-            employee_first_name: employee.data.employee_first_name,
+            id: user.data.id,
+            email: user.data.email,
+            firstName: user.data.firstName,
+            ...(user.data.role && { role: user.data.role }),  // Include role if available (for employees)
+            ...(user.data.lastName && { lastName: user.data.lastName }),  // Include last name if available (for customers)
+            ...(user.data.activeStatus && { activeStatus: user.data.activeStatus })  // Include active status if available
         };
+
         const token = jwt.sign(payload, jwtSecret, {
             expiresIn: "24h",
         });
 
         const sendBack = {
-            employee_token: token,
+            token: token,
         };
 
         return res.status(200).json({
             status: "success",
-            message: "Employee logged in successfully",
+            message: `${user.data.firstName} logged in successfully`,
             data: sendBack,
         });
     } catch (error) {

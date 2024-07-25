@@ -1,42 +1,101 @@
 const bcrypt = require('bcrypt');
-const employeeService = require("./employee.service");
+const { getCustomerByEmail } = require("./customer.service");
+const { getEmployeeByEmail } = require("./employee.service");
 
-async function logIn(employeeData) {
+async function checkIfEmailExists(email) {
+    if (!email) {
+        throw new Error('Email must be provided');
+    }
+
     try {
-        
-        if (!employeeData.email || !employeeData.password) {
+        console.log('Checking if email exists in customer or employee tables:', email);
+
+        const customerRows = await getCustomerByEmail(email);
+        console.log('Customer Rows:', customerRows);
+
+        if (customerRows && customerRows.length > 0) {
             return {
-                status: "fail",
-                message: "Email and password are required"
+                exists: true,
+                type: 'customer',
+                data: customerRows[0]
             };
         }
 
-        const employee = await employeeService.getEmployeeByEmail(employeeData.email);
-        if (employee.length === 0) {
-            return {
-                status: "fail",
-                message: "Employee does not exist"
-            };
-        }
+        const employeeRows = await getEmployeeByEmail(email);
+        console.log('Employee Rows:', employeeRows);
 
-        const passwordMatch = await bcrypt.compare(employeeData.password, employee[0].employee_password_hashed);
-        if (!passwordMatch) {
+        if (employeeRows && employeeRows.length > 0) {
             return {
-                status: "fail",
-                message: "Incorrect password"
+                exists: true,
+                type: 'employee',
+                data: employeeRows[0]
             };
         }
 
         return {
-            status: "success",
-            data: employee[0]
+            exists: false,
+            type: null,
+            data: null
         };
     } catch (error) {
-        console.error(error);
+        console.error('Error checking email existence:', error);
+        throw error;
+    }
+}
+
+async function logIn({ email, password }) {
+    try {
+        const { exists, type, data } = await checkIfEmailExists(email);
+        console.log(exists)
+        if (exists) {
+            return {
+                status: 'fail',
+                message: 'User not found',
+            };
+        }
+
+        let passwordMatch;
+        let userData = {};
+
+        if (type === 'employee') {
+            passwordMatch = await bcrypt.compare(password, data.employee_password_hashed);
+            if (passwordMatch) {
+                userData = {
+                    id: data.employee_id,
+                    email: data.employee_email,
+                    role: data.company_role_id,
+                    firstName: data.employee_first_name,
+                    lastName: data.employee_last_name,
+                    phone: data.employee_phone,
+                };
+            }
+        } else if (type === 'customer') {
+            passwordMatch = await bcrypt.compare(password, data.customer_password_hashed);
+            if (passwordMatch) {
+                userData = {
+                    id: data.customer_id,
+                    email: data.customer_email,
+                    firstName: data.customer_first_name,
+                    lastName: data.customer_last_name,
+                    phoneNumber: data.customer_phone_number,
+                };
+            }
+        }
+
+        if (!passwordMatch) {
+            return {
+                status: 'fail',
+                message: 'Incorrect password',
+            };
+        }
+
         return {
-            status: "error",
-            message: "Internal server error"
+            status: 'success',
+            data: userData,
         };
+    } catch (error) {
+        console.error('Error logging in user:', error);
+        throw error;
     }
 }
 
