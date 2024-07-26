@@ -412,3 +412,8 @@ input:disabled {
     color: #3a3838;
     font-weight: 400;
 }
+.form{
+    margin-top: -40px !important;
+    width: 40%;
+    margin: auto;
+}

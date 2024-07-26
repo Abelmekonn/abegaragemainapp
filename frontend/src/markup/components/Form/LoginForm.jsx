@@ -75,13 +75,15 @@ function LoginForm() {
     };
 
     return (
-        <section className="contact-section">
+        <section className="contact-section form">
             <div className="auto-container">
                 <div className="contact-title">
                     <h2>Login to your account</h2>
                 </div>
+                <h6 className='mb-3'>Don't have an account ? <a href="/register"><span className='text-warning'>Sign up</span></a></h6>
                 <div className="row clearfix">
-                    <div className="form-column col-lg-7">
+                    
+                    <div className="form-column col-lg-12">
                         <div className="inner-column">
                             <div className="contact-form">
                                 <form onSubmit={handleSubmit}>

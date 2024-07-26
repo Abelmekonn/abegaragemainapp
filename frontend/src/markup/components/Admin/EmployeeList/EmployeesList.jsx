@@ -13,7 +13,7 @@ const EmployeesList = () => {
   const { employee } = useAuth();
   let token = null;
   if (employee) {
-    token = employee.employee_token;
+    token = employee.token;
   }
 
   const navigate = useNavigate(); // Initialize useNavigate hook

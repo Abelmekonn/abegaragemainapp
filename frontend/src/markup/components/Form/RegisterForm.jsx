@@ -86,13 +86,14 @@ function RegisterForm() {
     };
 
     return (
-        <section className="contact-section">
+        <section className="contact-section form">
             <div className="auto-container">
                 <div className="contact-title">
-                    <h2>Add a new customer</h2>
+                    <h2>Register</h2>
                 </div>
+                <h6 className='mb-3'>Have an account ? <a href="/login"><span className='text-warning'>Login</span></a></h6>
                 <div className="row clearfix">
-                    <div className="form-column col-lg-7">
+                    <div className="form-column col-lg-12">
                         <div className="inner-column">
                             <div className="contact-form">
                                 <form onSubmit={handleSubmit}>
