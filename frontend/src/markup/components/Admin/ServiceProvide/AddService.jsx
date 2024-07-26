@@ -9,9 +9,9 @@ function AddService() {
     const [success, setSuccess] = useState('');
     let token='';
     const {employee}= useAuth();
-    if(employee && employee.employee_token){
+    if(employee && employee.token){
         // eslint-disable-next-line no-const-assign
-        token=employee.employee_token;
+        token=employee.token;
     }
 
     const handleSubmit = async (e) => {

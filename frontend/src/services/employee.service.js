@@ -24,7 +24,6 @@ const createEmployee = async (formData,loggedInEmployeeToken) => {
 };
 
 const getAllEmployees = async (token) => {
-  // console.log(token);
   const requestOptions = {
     method: 'GET',
     headers: {
@@ -32,9 +31,26 @@ const getAllEmployees = async (token) => {
       'x-access-token': token
     }
   };
-  const response = await fetch(`${api_url}/api/employees`, requestOptions);
-  return response;
-}
+
+  console.log('Request URL:', `${api_url}/api/employees`);
+  console.log('Request Options:', requestOptions);
+
+  try {
+    const response = await fetch(`${api_url}/api/employees`, requestOptions);
+
+    if (!response.ok) {
+      const errorData = await response.json(); // Get error details
+      console.error('Error response:', errorData);
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.json(); // Parse JSON response
+  } catch (error) {
+    console.error('Error fetching employees:', error.message);
+    throw error; // Rethrow error for component to handle
+  }
+};
+
+
 const updateEmployee = async (formData, loggedInEmployeeToken) => {
   const requestOptions = {
       method: 'PUT',

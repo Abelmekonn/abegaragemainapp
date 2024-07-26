@@ -4,6 +4,7 @@ const employeeService = require("../services/employee.service");
 
 const verifyToken = async (req, res, next) => {
     let token = req.headers["x-access-token"];
+
     if (!token) {
         return res.status(403).send({
             status: "fail",
@@ -19,14 +20,16 @@ const verifyToken = async (req, res, next) => {
             });
         }
 
-        req.employee_email = decoded.employee_email;
+        req.email = decoded.email;
+         // Log the decoded email
         next();
     });
 }
 
 const isAdmin = async (req, res, next) => {
     try {
-        const employee_email = req.employee_email;
+        const employee_email = req.email;
+         // Log the email
 
         if (!employee_email) {
             return res.status(400).send({
@@ -36,8 +39,7 @@ const isAdmin = async (req, res, next) => {
         }
 
         const employee = await employeeService.getEmployeeByEmail(employee_email);
-        console.log("emmm")
-        console.log(employee)
+
         if (!employee || !employee[0]) {
             return res.status(404).send({
                 status: "fail",
@@ -61,6 +63,7 @@ const isAdmin = async (req, res, next) => {
         });
     }
 }
+
 
 const authMiddleware = {
     verifyToken,

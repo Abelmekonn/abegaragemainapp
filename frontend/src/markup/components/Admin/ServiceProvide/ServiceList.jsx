@@ -9,8 +9,8 @@ function ServiceList() {
     const { employee } = useAuth();
     let token = '';
 
-    if (employee && employee.employee_token) {
-        token = employee.employee_token;
+    if (employee && employee.token) {
+        token = employee.token;
     }
 
     useEffect(() => {

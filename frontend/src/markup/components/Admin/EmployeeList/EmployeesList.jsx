@@ -11,36 +11,22 @@ const EmployeesList = () => {
   const [apiError, setApiError] = useState(false);
   const [apiErrorMessage, setApiErrorMessage] = useState(null);
   const { employee } = useAuth();
-  let token = null;
-  if (employee) {
-    token = employee.token;
-  }
+  const navigate = useNavigate();
 
-  const navigate = useNavigate(); // Initialize useNavigate hook
+  let token = employee ? employee.token : null;
 
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const response = await employeeService.getAllEmployees(token);
-        if (!response.ok) {
-          setApiError(true);
-          if (response.status === 401) {
-            setApiErrorMessage("Please login again");
-          } else if (response.status === 403) {
-            setApiErrorMessage("You are not authorized to view this page");
-          } else {
-            setApiErrorMessage("Please try again later");
-          }
-          return;
-        }
-        const data = await response.json();
-        if (data.data.length > 0) {
-          setEmployees(data.data);
+        const data = await employeeService.getAllEmployees(token);
+        if (data.length > 0) {
+          console.log(data)
+          setEmployees(data);
         }
       } catch (error) {
         console.error('Error fetching employees:', error);
         setApiError(true);
-        setApiErrorMessage("Error fetching employees. Please try again later.");
+        setApiErrorMessage(error.message || "Error fetching employees. Please try again later.");
       }
     };
 
@@ -48,7 +34,6 @@ const EmployeesList = () => {
   }, [token]);
 
   const handleEditEmployee = (employeeId) => {
-    // Navigate to the edit page with employeeId
     navigate(`/admin/employee/update/${employeeId}`);
   };
 
