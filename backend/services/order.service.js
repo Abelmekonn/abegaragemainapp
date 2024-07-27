@@ -58,7 +58,11 @@ async function createOrder(order) {
     }
 }
 
-async function getOrderById(orderId) {
+const getOrderById = async (orderId) => {
+    if (orderId === undefined || orderId === null) {
+        throw new Error('Order ID must be provided');
+    }
+
     try {
         const query = `SELECT o.order_id, o.employee_id, o.customer_id, o.vehicle_id, o.active_order, o.order_hash,
                       oi.order_total_price, oi.additional_request, oi.notes_for_internal_use, oi.notes_for_customer, oi.additional_requests_completed,
@@ -68,9 +72,9 @@ async function getOrderById(orderId) {
                      LEFT JOIN order_info oi ON o.order_id= oi.order_id
                      LEFT JOIN order_services os ON o.order_id = os.order_id
                      LEFT JOIN order_status ost ON o.order_id = ost.order_id
-                     WHERE o.id = ?`;
+                     WHERE o.order_id = ?`;
 
-        const results = await conn.query(query, [orderId]);
+        const [results] = await conn.query(query, [orderId]);
 
         if (results.length === 0) {
             throw new Error('Order not found');
@@ -78,7 +82,7 @@ async function getOrderById(orderId) {
 
         const order = results[0];
         return {
-            id: order.id,
+            id: order.order_id,
             employeeId: order.employee_id,
             customerId: order.customer_id,
             vehicleId: order.vehicle_id,
@@ -89,12 +93,10 @@ async function getOrderById(orderId) {
             notesForInternalUse: order.notes_for_internal_use,
             notesForCustomer: order.notes_for_customer,
             additionalRequestsCompleted: order.additional_requests_completed,
-            services: [
-                {
-                    serviceId: order.service_id,
-                    serviceCompleted: order.service_completed,
-                },
-            ],
+            services: results.map(row => ({
+                serviceId: row.service_id,
+                serviceCompleted: row.service_completed,
+            })),
             orderStatus: order.order_status,
         };
     } catch (error) {
@@ -102,6 +104,9 @@ async function getOrderById(orderId) {
         throw new Error('Error getting order by ID');
     }
 }
+
+
+
 const getAllOrders = async (token) => {
     const query = `
       SELECT o.order_id, o.employee_id, o.customer_id, o.vehicle_id, o.order_date ,o.active_order, o.order_hash,
@@ -118,19 +123,47 @@ const getAllOrders = async (token) => {
       ORDER BY o.order_id DESC
       LIMIT 10;
     `;
-  
+
     try {
-      const rows = await conn.query(query);
-      console.log(rows)
-      return rows; // Return the array of orders
+        const rows = await conn.query(query);
+        return rows; // Return the array of orders
     } catch (error) {
-      console.error('Error getting all orders:', error.message);
-      throw error;
+        console.error('Error getting all orders:', error.message);
+        throw error;
     }
-  };
+};
+
+const getOrderByCustomerId = async (customerId) => {
+    const query = `
+      SELECT o.order_id, o.employee_id, o.customer_id, o.vehicle_id, o.active_order, o.order_hash,
+      oi.order_total_price, oi.additional_request, oi.notes_for_internal_use, oi.notes_for_customer, oi.additional_requests_completed,
+      GROUP_CONCAT(DISTINCT os.service_id ORDER BY os.service_id) AS service_ids,
+      GROUP_CONCAT(DISTINCT os.order_service_id ORDER BY os.order_service_id) AS order_service_ids,
+      GROUP_CONCAT(DISTINCT os.service_completed ORDER BY os.service_id) AS service_completed,
+      ost.order_status
+      FROM orders o
+      INNER JOIN order_info oi ON o.order_id = oi.order_id
+      INNER JOIN order_services os ON o.order_id = os.order_id
+      INNER JOIN order_status ost ON o.order_id = ost.order_id
+      WHERE o.customer_id = ?
+      GROUP BY o.order_id
+      ORDER BY o.order_id DESC;
+    `;
+
+    try {
+        const [rows] = await conn.query(query, [customerId]); // Added [rows] to destructure correctly
+        console.log(rows)
+        return rows; // Return the array of orders for the customer
+    } catch (error) {
+        console.error('Error getting orders by customer ID:', error.message);
+        throw error;
+    }
+};
+
 
 module.exports = {
     createOrder,
     getAllOrders,
     getOrderById,
+    getOrderByCustomerId,
 };

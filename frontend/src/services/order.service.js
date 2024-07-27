@@ -23,8 +23,6 @@ const createOrder = async (order, token) => {
     }
 };
 
-// orderService.js
-
 const getAllOrders = async (token) => {
     const requestOptions = {
         method: 'GET',
@@ -46,8 +44,6 @@ const getAllOrders = async (token) => {
     }
 };
 
-
-
 const getOrderById = async (orderId, token) => {
     const requestOptions = {
         method: 'GET',
@@ -63,9 +59,30 @@ const getOrderById = async (orderId, token) => {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        return response; // Parse JSON response
+        return response.json(); // Parse JSON response
     } catch (error) {
         console.error('Error in get order by id:', error.message);
+        throw error; // Rethrow error for component to handle
+    }
+};
+
+const getOrderByCustomerId = async (customerId) => {
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    };
+    try {
+        const response = await fetch(`${api_url}/api/order/customer/${customerId}`, requestOptions);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        return response.json(); // Parse JSON response
+    } catch (error) {
+        console.error('Error in get order by customer id:', error.message);
         throw error; // Rethrow error for component to handle
     }
 };
@@ -73,7 +90,8 @@ const getOrderById = async (orderId, token) => {
 const orderService = {
     createOrder,
     getAllOrders,
-    getOrderById
+    getOrderById,
+    getOrderByCustomerId
 };
 
 export default orderService;

@@ -18,8 +18,8 @@ function AddVehicleForm() {
 
     let loggedInEmployeeToken = '';
     const { employee } = useAuth();
-    if (employee && employee.employee_token) {
-        loggedInEmployeeToken = employee.employee_token;
+    if (employee && employee.token) {
+        loggedInEmployeeToken = employee.token;
     }
 
     const handleSubmit = async (e) => {

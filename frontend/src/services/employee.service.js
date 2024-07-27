@@ -32,8 +32,6 @@ const getAllEmployees = async (token) => {
     }
   };
 
-  console.log('Request URL:', `${api_url}/api/employees`);
-  console.log('Request Options:', requestOptions);
 
   try {
     const response = await fetch(`${api_url}/api/employees`, requestOptions);
@@ -43,12 +41,16 @@ const getAllEmployees = async (token) => {
       console.error('Error response:', errorData);
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
-    return response.json(); // Parse JSON response
+
+    const data = await response.json(); // Parse JSON response
+    console.log('Fetched Employees:', data);
+    return data.data;
   } catch (error) {
     console.error('Error fetching employees:', error.message);
     throw error; // Rethrow error for component to handle
   }
 };
+
 
 
 const updateEmployee = async (formData, loggedInEmployeeToken) => {

@@ -5,6 +5,8 @@ import customerService from '../../../../services/customer.service';
 import vehicleService from '../../../../services/vehicle.service';
 import serviceService from '../../../../services/service.service';
 import orderService from '../../../../services/order.service';
+import { useNavigate } from 'react-router-dom';
+
 
 function SelectService({ customerId, vehicleId, onSelectService }) {
     const [service, setService] = useState([])
@@ -16,11 +18,12 @@ function SelectService({ customerId, vehicleId, onSelectService }) {
     const [apiErrorMessage, setApiErrorMessage] = useState(null);
     const [apiError, setApiError] = useState(false);
     const { employee } = useAuth();
+    const navigate = useNavigate();
     let token = null;
     let employee_id=null
     if (employee) {
-        token = employee.employee_token;
-        employee_id=employee.employee_id
+        token = employee.token;
+        employee_id=employee.id
     }
     console.log(`${employee_id} employee_id`)
     console.log(`${customerId} customer` )
@@ -126,9 +129,12 @@ function SelectService({ customerId, vehicleId, onSelectService }) {
     
         try {
             const response = await orderService.createOrder(order, token);
+            console.log('Response:', response); // Add this line
             if (response.ok) {
                 const data = await response.json();
                 alert('Order created successfully!');
+                console.log('Navigating to /admin/orders'); // Add this line
+                navigate('/admin/orders');
                 // Handle success (e.g., redirect, clear form, etc.)
             } else {
                 const errorData = await response.json();
@@ -142,8 +148,6 @@ function SelectService({ customerId, vehicleId, onSelectService }) {
         }
     };
     
-
-
     return (
         <div>
             <div>

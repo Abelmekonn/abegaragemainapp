@@ -8,15 +8,13 @@ const LogIn = async (formData) => {
         body: JSON.stringify(formData)
     };
 
-    console.log('API URL:', api_url);
-    console.log('Request Options:', requestOptions);
+    
 
     try {
         const response = await fetch(`${api_url}/api/login`, requestOptions);
         const responseData = await response.json();
 
-        console.log('Response Status:', response.status);
-        console.log('Response Data:', responseData);
+        
 
         if (!response.ok) {
             console.error('Response Error:', responseData);

@@ -6,7 +6,10 @@ import customerService from '../../../../services/customer.service';
 function CustomerUpdate() {
     const { customerId } = useParams();
     const { employee } = useAuth();
-    const token = employee?.employee_token || '';
+    let token = null;
+    if (employee) {
+        token = employee.token;
+    }
     const navigate = useNavigate();
     const [customerData, setCustomerData] = useState({
         customer_phone_number: '',
@@ -21,7 +24,7 @@ function CustomerUpdate() {
             try {
                 const response = await customerService.getAllCustomers(token);
                 const data = await response.json();
-                const customers = data.data || data;
+                const customers = data.data ;
                 const customerToEdit = customers.find(cust => cust.customer_id === parseInt(customerId, 10));
                 if (customerToEdit) {
                     setCustomerData(prevData => ({

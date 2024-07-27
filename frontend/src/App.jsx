@@ -2,6 +2,7 @@ import Home from '../src/markup/pages/Home'
 import About from './markup/pages/About'
 import Services from './markup/pages/Services'
 import Contact from './markup/pages/Contact'
+import Order from './markup/pages/Order'
 import Login from './markup/pages/Login'
 import { Route, Routes } from 'react-router'
 
@@ -51,6 +52,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/services" element={<Services />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/order" element={<Order />} />
         <Route path="/login" element={<Login />} />
         <Route path='/register' element={<Register />} />
         

@@ -16,7 +16,7 @@ function CustomerSearch({ onSelectCustomer }) {
     const navigate = useNavigate();
     let token = null;
     if (employee) {
-        token = employee.employee_token;
+        token = employee.token;
     }
 
     useEffect(() => {

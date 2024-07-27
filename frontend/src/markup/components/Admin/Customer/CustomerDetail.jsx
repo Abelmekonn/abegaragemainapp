@@ -16,7 +16,7 @@ function CustomerDetail() {
     let token = null;
 
     if (employee) {
-        token = employee.employee_token;
+        token = employee.token;
     }
 
     useEffect(() => {

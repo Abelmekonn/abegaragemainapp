@@ -6,7 +6,7 @@ import customerService from "../../../../services/customer.service";
 import vehicleService from "../../../../services/vehicle.service";
 import employeeService from "../../../../services/employee.service";
 import serviceService from '../../../../services/service.service';
-
+import ScrollReveal from 'scrollreveal';
 
 function OrderDetail() {
     const { orderId } = useParams();
@@ -19,7 +19,7 @@ function OrderDetail() {
     const [vehicle, setVehicle] = useState({});
     const [order, setOrder] = useState({});
     const { employee } = useAuth();
-    const token = employee ? employee.employee_token : null;
+    const token = employee ? employee.token : null;
 
     useEffect(() => {
         async function fetchOrder() {
@@ -28,7 +28,6 @@ function OrderDetail() {
                 const filteredOrder = response.find(order => order.order_id === parseInt(orderId));
                 if (filteredOrder) {
                     setOrder(filteredOrder);
-                    console.log(order)
                 }
                 setApiError(false);
                 setApiErrorMessage(null);
@@ -131,8 +130,6 @@ function OrderDetail() {
             setApiErrorMessage("Please login again");
         } else if (response.status === 403) {
             setApiErrorMessage("You are not authorized to view this page");
-        } else {
-            setApiErrorMessage("Please try again later");
         }
     };
 
@@ -161,6 +158,34 @@ function OrderDetail() {
                 return "status-unknown";
         }
     };
+
+    useEffect(() => {
+        ScrollReveal().reveal('.service-block-one', {
+            distance: '50px',
+            origin: 'bottom',
+            duration: 1000,
+            interval: 200,
+            reset: true,
+
+        });
+
+        ScrollReveal().reveal('.sec-title', {
+            distance: '50px',
+            origin: 'left',
+            duration: 1000,
+            reset: true,
+
+        });
+
+        ScrollReveal().reveal('.service-box', {
+            distance: '50px',
+            origin: 'right',
+            duration: 1000,
+            interval: 300,
+            reset: true,
+
+        });
+    }, []);
 
     return (
         <div>

@@ -66,11 +66,15 @@ function Header(props) {
                                                 <li className="dropdown"><a href="/services">Services</a>
                                                 </li>
                                                 <li><a href="/contact">Contact Us</a></li>
-                                                {isAdmin ? (
-                                                    <li><a href="/Admin">Admin</a></li>
-                                                ) : (
-                                                    <li></li>
-                                                )}
+                                                {isLogged ? (
+                                                        isAdmin ? (
+                                                            <li><a href="/Admin">Admin</a></li>
+                                                        ) : (
+                                                            <li><a href="/order">Order</a></li>
+                                                        )
+                                                    ) : (
+                                                        <li></li>
+                                                    )}
                                             </ul>
                                         </div>
                                     </nav>
@@ -111,10 +115,14 @@ function Header(props) {
                                                     <li className="dropdown"><a href="/services">Services</a>
                                                     </li>
                                                     <li><a href="/contact">Contact Us</a></li>
-                                                    {isAdmin ? (
-                                                        <li><a href="/Admin">Admin</a></li>
+                                                    {isLogged ? (
+                                                        isAdmin ? (
+                                                            <li><a href="/Admin">Admin</a></li>
+                                                        ) : (
+                                                            <li><a href="/order">Order</a></li>
+                                                        )
                                                     ) : (
-                                                        <li><a href="">Order</a></li>
+                                                        <li></li>
                                                     )}
                                                 </ul>
                                             </div>
@@ -124,14 +132,14 @@ function Header(props) {
                                     </div>
                                     <div className="search-btn"></div>
                                     {isLogged ? (
-                                    <div className="link-btn">
-                                        <Link to="/" className="theme-btn btn-style-one blue" onClick={logOut} >Log out</Link>
-                                    </div>
-                                ) : (
-                                    <div className="link-btn">
-                                        <Link to="/login" className="theme-btn btn-style-one">Login</Link>
-                                    </div>
-                                )}
+                                        <div className="link-btn">
+                                            <Link to="/" className="theme-btn btn-style-one blue" onClick={logOut} >Log out</Link>
+                                        </div>
+                                    ) : (
+                                        <div className="link-btn">
+                                            <Link to="/login" className="theme-btn btn-style-one">Login</Link>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>

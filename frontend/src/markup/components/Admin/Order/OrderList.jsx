@@ -16,15 +16,16 @@ function OrderList() {
     const [vehicles, setVehicles] = useState([]);
     const [orders, setOrders] = useState([]);
     const { employee } = useAuth();
-    const token = employee ? employee.employee_token : null;
+    const token = employee ? employee.token : null;
     const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchOrders() {
             try {
                 const response = await orderService.getAllOrders(token);
-                
+
                 setOrders(response); // Set orders state with response
+
                 setApiError(false);
                 setApiErrorMessage(null);
             } catch (error) {
@@ -37,7 +38,6 @@ function OrderList() {
             fetchOrders();
         }
     }, [token]);
-
     useEffect(() => {
         if (orders.length > 0) {
             const vehicleIds = orders.map(order => order.vehicle_id);
@@ -50,7 +50,6 @@ function OrderList() {
             fetchCustomer(customerId);
         }
     }, [orders]);
-
     const fetchCustomer = async (customerId) => {
         try {
             const response = await customerService.getAllCustomers(token);
@@ -60,8 +59,6 @@ function OrderList() {
                     setApiErrorMessage("Please login again");
                 } else if (response.status === 403) {
                     setApiErrorMessage("You are not authorized to view this page");
-                } else {
-                    setApiErrorMessage("Please try again later");
                 }
                 return;
             }
@@ -74,9 +71,6 @@ function OrderList() {
             setApiErrorMessage("Error fetching customers. Please try again later.");
         }
     };
-
-
-
     const fetchVehicles = async (vehicleIds) => {
         try {
             const response = await vehicleService.getVehicles(token, vehicleIds);
@@ -93,27 +87,19 @@ function OrderList() {
     };
     const fetchEmployees = async (employeeIds) => {
         try {
-            const response = await employeeService.getAllEmployees(token);
-            if (!response.ok) { 
-                setApiError(true);
-                if (response.status === 401) {
-                    setApiErrorMessage("Please login again");
-                } else if (response.status === 403) {
-                    setApiErrorMessage("You are not authorized to view this page");
-                } else {
-                    setApiErrorMessage("Please try again later");
-                }
-                return;
-            }
-            const data = await response.json();
-            const filteredEmployees = data.data.find(employee => employee.employee_id === parseInt(employeeIds));
-            setEmployees(filteredEmployees);
+            const response = await employeeService.getAllEmployees(token, employeeIds);
+            const filteredEmployees = response.filter((employee) => employeeIds.includes(employee.employee_id));
+
+            // Loop through the filtered employees and add to the state array
+            setEmployees((prevEmployees) => [...prevEmployees, ...filteredEmployees]);
+            console.log(employees)
         } catch (error) {
             console.error('Error fetching employees:', error.message);
             setApiError(true);
             setApiErrorMessage("Error fetching employees. Please try again later.");
         }
     };
+
 
     const handleViewOrder = (orderId) => {
         navigate(`/admin/orders/${orderId}`);
@@ -184,7 +170,9 @@ function OrderList() {
                                     <td><div>{`${customer.customer_first_name} ${customer.customer_last_name}`} <br /> {customer.customer_email} <br /> {customer.customer_phone_number}</div></td>
                                     <td>{vehicles.vehicle_model} <br /> {vehicles.vehicle_year} <br /> {vehicles.vehicle_serial}</td>
                                     <td>{formatDate(order.order_date)}</td>
-                                    <td key={employee.employee_id}>{employees.employee_first_name}</td>
+                                    <td>
+                                        {employees.find((employee) => employee.employee_id === order.employee_id)?.employee_first_name}
+                                    </td>
                                     <td ><p className={getOrderStatusClassName(order.order_status)}>{getOrderStatus(order.order_status)}</p></td>
                                     <td>
                                         <div className="edit d-flex justify-content-around">

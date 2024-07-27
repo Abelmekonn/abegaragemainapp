@@ -6,7 +6,7 @@ import { useAuth } from '../../../../contexts/AuthContext';
 const UpdateEmployeeComponent = () => {
     const { employeeId } = useParams();
     const { employee } = useAuth();
-    const loggedInEmployeeToken = employee?.employee_token || '';
+    const loggedInEmployeeToken = employee?.token || '';
     const navigate = useNavigate();
     const [employeeData, setEmployeeData] = useState({
         employee_first_name: '',
@@ -20,8 +20,8 @@ const UpdateEmployeeComponent = () => {
         const fetchEmployeeData = async () => {
             try {
                 const response = await employeeService.getAllEmployees(loggedInEmployeeToken);
-                const data = await response.json();
-                const employees = data.data || data; // Adjust if the API response has a 'data' property
+                const data = await response;
+                const employees = data ; // Adjust if the API response has a 'data' property
                 const employeeToEdit = employees.find(emp => emp.employee_id === parseInt(employeeId, 10));
                 if (employeeToEdit) {
                     setEmployeeData(employeeToEdit);
