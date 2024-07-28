@@ -5,7 +5,7 @@ const {createVehicle,getVehicles,updateVehicle,getVehicleByCustomerId}=require("
 
 router.post("/api/vehicle",[middleware.verifyToken,middleware.isAdmin],createVehicle)
 router.get(`/api/all-vehicles`,[middleware.verifyToken,middleware.isAdmin],getVehicles)
-router.get(`/api/vehicle/:customerId`,[middleware.verifyToken,middleware.isAdmin],getVehicleByCustomerId)
+router.get("/api/vehicle/:customerId",getVehicleByCustomerId)
 router.put("/api/vehicle/update",[middleware.verifyToken,middleware.isAdmin],updateVehicle)
 
 module.exports = router;

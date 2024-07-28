@@ -48,13 +48,13 @@ const getOrderById = async (req, res) => {
 
 const getOrderByCustomerId = async (req, res) => {
     const customerId = req.params.customerId;
-
+    
     if (!customerId) {
         return res.status(400).send('Customer ID must be provided');
     }
 
     try {
-        const orders = await orderService.getOrdersByCustomerId(customerId);
+        const orders = await orderService.getOrderByCustomerId(customerId);
         res.json(orders);
     } catch (error) {
         console.error('Error in controller:', error);

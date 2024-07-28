@@ -35,6 +35,7 @@ const getVehicles = async () => {
 
 const getVehicleByCustomerId = async (req, res) => {
     const customerId = req.params.customerId;
+    console.log("servis id " ,customerId)
     const query = `SELECT * FROM customer_vehicle_info WHERE customer_id = ? ORDER BY vehicle_id DESC`;
 
     try {

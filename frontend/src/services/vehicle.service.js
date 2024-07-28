@@ -62,12 +62,11 @@ const updateVehicle = async (vehicleData, token) => {
     }
 };
 
-const getVehicleByCustomerId = async (token, customerId) => {
+const getVehicleByCustomerId = async ( customerId) => {
     const requestOptions = {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'x-access-token': token
         }
     };
 

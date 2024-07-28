@@ -101,6 +101,28 @@ async function getCustomerByEmail(customer_email) {
     }
 }
 
+
+async function getCustomerById(customer_id) {
+    if (!customer_id) {
+        throw new Error('Customer ID parameter is undefined');
+    }
+    
+
+    const query = `
+        SELECT * FROM customer_identifier 
+        INNER JOIN customer_info ON customer_identifier.customer_id = customer_info.customer_id 
+        WHERE customer_identifier.customer_id = ?
+    `;
+
+    try {
+        const [rows] = await conn.query(query, [customer_id]);
+        return rows; // Return the rows directly
+    } catch (error) {
+        console.error('Error fetching customer by ID:', error);
+        throw error;
+    }
+}
+
 // A function to get all customers
 async function getAllCustomers() {
     const query = `
@@ -154,6 +176,7 @@ module.exports = {
     checkIfCustomerExists,
     createCustomer,
     getCustomerByEmail,
+    getCustomerById,
     getAllCustomers,
     updateCustomer // Add the updateCustomer function to exports
 };

@@ -39,7 +39,8 @@ const getVehicles = async (req, res, next) => {
 async function getVehicleByCustomerId(req, res, next) {
     try {
         const customerId = req.params.customerId;
-        customerId = parseInt(customerId)
+        console.log(customerId)
+        
         const vehicles = await vehicleService.getVehicleByCustomerId(customerId);
         if (!vehicles || vehicles.length === 0) {
             return res.status(404).json({

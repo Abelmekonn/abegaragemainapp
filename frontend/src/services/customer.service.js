@@ -35,6 +35,39 @@ const getAllCustomers = async (token) => {
     const response = await fetch(`${api_url}/api/customers`, requestOptions);
     return response;
 }
+const getCustomerById = async (id) => {
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    };
+
+    try {
+        const response = await fetch(`${api_url}/api/customer/${id}`, requestOptions);
+        
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const responseBody = await response.text();
+
+        try {
+            const data = JSON.parse(responseBody);
+            
+            return data;
+        } catch (error) {
+            console.error('Error parsing response:', error);
+            throw error;
+        }
+    } catch (error) {
+        console.error('Error in getCustomerById:', error);
+        throw error;
+    }
+};
+
+
 
 
 const updateCustomer = async (customerData, token) => {
@@ -65,7 +98,8 @@ const updateCustomer = async (customerData, token) => {
 const customerService = {
     createCustomer,
     getAllCustomers,
-    updateCustomer  // Added updateCustomer to the exported service
+    updateCustomer,
+    getCustomerById  // Added updateCustomer to the exported service
 };
 
 export default customerService;

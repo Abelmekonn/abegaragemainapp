@@ -62,6 +62,30 @@ async function getAllCustomers(req, res, next) {
     }
 }
 
+const getCustomerById = async (req, res) => {
+    const id = req.params.id;
+    
+
+    if (!id) {
+        return res.status(400).json({ error: 'Customer ID parameter is required' });
+    }
+
+    try {
+        const customer = await customerService.getCustomerById(id);
+
+        if (!customer || customer.length === 0) {
+            return res.status(404).json({ error: 'Customer not found' });
+        }
+
+        return res.status(200).json({status: "success",
+            data:customer}); // Return the first customer object
+    } catch (error) {
+        console.error('Error in customer controller:', error);
+        return res.status(500).json({ error: 'Error fetching customer' });
+    }
+};
+
+
 // Create the updateCustomer controller
 async function updateCustomer(req, res, next) {
     const customerData = req.body;
@@ -83,5 +107,6 @@ async function updateCustomer(req, res, next) {
 module.exports = {
     createCustomer,
     getAllCustomers,
-    updateCustomer
+    updateCustomer,
+    getCustomerById
 };

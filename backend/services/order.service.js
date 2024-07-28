@@ -134,31 +134,60 @@ const getAllOrders = async (token) => {
 };
 
 const getOrderByCustomerId = async (customerId) => {
-    const query = `
-      SELECT o.order_id, o.employee_id, o.customer_id, o.vehicle_id, o.active_order, o.order_hash,
-      oi.order_total_price, oi.additional_request, oi.notes_for_internal_use, oi.notes_for_customer, oi.additional_requests_completed,
-      GROUP_CONCAT(DISTINCT os.service_id ORDER BY os.service_id) AS service_ids,
-      GROUP_CONCAT(DISTINCT os.order_service_id ORDER BY os.order_service_id) AS order_service_ids,
-      GROUP_CONCAT(DISTINCT os.service_completed ORDER BY os.service_id) AS service_completed,
-      ost.order_status
-      FROM orders o
-      INNER JOIN order_info oi ON o.order_id = oi.order_id
-      INNER JOIN order_services os ON o.order_id = os.order_id
-      INNER JOIN order_status ost ON o.order_id = ost.order_id
-      WHERE o.customer_id = ?
-      GROUP BY o.order_id
-      ORDER BY o.order_id DESC;
-    `;
+    if (customerId === undefined || customerId === null) {
+        throw new Error('Customer ID must be provided');
+    }
 
     try {
-        const [rows] = await conn.query(query, [customerId]); // Added [rows] to destructure correctly
-        console.log(rows)
-        return rows; // Return the array of orders for the customer
+        const query = `SELECT o.order_id, o.employee_id, o.customer_id, o.vehicle_id, o.active_order, o.order_hash,
+                      oi.order_total_price, oi.additional_request, oi.notes_for_internal_use, oi.notes_for_customer, oi.additional_requests_completed,
+                      os.service_id, os.service_completed,
+                      ost.order_status
+                     FROM orders o
+                     LEFT JOIN order_info oi ON o.order_id = oi.order_id
+                     LEFT JOIN order_services os ON o.order_id = os.order_id
+                     LEFT JOIN order_status ost ON o.order_id = ost.order_id
+                     WHERE o.customer_id = ?`;
+
+        const [results] = await conn.query(query, [customerId]);
+
+        console.log('Results:', results); // Log the result to understand its structure
+
+        // Ensure results is an array
+        const rows = Array.isArray(results) ? results : [results];
+
+        if (rows.length === 0) {
+            return []; // No orders found
+        }
+
+        // Process each row
+        return rows.map(row => ({
+            id: row.order_id,
+            employeeId: row.employee_id,
+            customerId: row.customer_id,
+            vehicleId: row.vehicle_id,
+            activeOrder: row.active_order,
+            orderHash: row.order_hash,
+            orderTotalPrice: row.order_total_price,
+            additionalRequest: row.additional_request,
+            notesForInternalUse: row.notes_for_internal_use,
+            notesForCustomer: row.notes_for_customer,
+            additionalRequestsCompleted: row.additional_requests_completed,
+            services: rows.filter(service => service.service_id === row.service_id).map(service => ({
+                serviceId: service.service_id,
+                serviceCompleted: service.service_completed,
+            })),
+            orderStatus: row.order_status,
+        }));
     } catch (error) {
-        console.error('Error getting orders by customer ID:', error.message);
-        throw error;
+        console.error('Error getting orders by customer ID:', error);
+        throw new Error('Error getting orders by customer ID');
     }
 };
+
+
+
+
 
 
 module.exports = {
