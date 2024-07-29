@@ -4,7 +4,6 @@ import { useAuth } from "../../contexts/AuthContext";
 import orderService from "../../services/order.service";
 import customerService from "../../services/customer.service";
 import vehicleService from "../../services/vehicle.service";
-import employeeService from "../../services/employee.service";
 import serviceService from "../../services/service.service";
 import ScrollReveal from 'scrollreveal';
 
@@ -29,7 +28,8 @@ function Order() {
         async function fetchOrder() {
             try {
                 const response = await orderService.getOrderByCustomerId(customer_id, token);
-                setOrder(response)
+                setOrder(response[0])
+                console.log(response)
                 setApiError(false);
                 setApiErrorMessage(null);
             } catch (error) {
@@ -48,12 +48,12 @@ function Order() {
             fetchCustomer(order.customerId);
             fetchVehicle(order.vehicleId);
 
-
-            if (order.service_ids) {
-                const serviceIds = String(order.service_ids);
-                const serviceIdArr = serviceIds.split(",");
-                setServiceIdsArray(serviceIdArr);
+            if (order.services) {
+                const serviceIds = order.services.map(service => parseInt(service.serviceId));
+                setServiceIdsArray(serviceIds);
+                console.log(serviceIds)
             }
+
             fetchServices();
         }
     }, [order]);
@@ -61,14 +61,14 @@ function Order() {
     const fetchCustomer = async () => {
         try {
             const response = await customerService.getCustomerById(customer_id);
-            
+
 
             if (response.status !== 'success') {
                 throw new Error('Failed to fetch customer data');
             }
 
             setCustomer(response.data);
-            
+
         } catch (error) {
             console.error('Error fetching customer:', error.message);
             setApiError(true);
@@ -76,16 +76,11 @@ function Order() {
         }
     };
 
-    const fetchVehicle = async (vehicleId) => {
+    const fetchVehicle = async () => {
         try {
-            const response = await vehicleService.getVehicleByCustomerId(customer_id);
-            console.log(response)
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            const data = await response.json();
-            const filteredVehicle = data.data.find(vehicle => vehicle.vehicle_id === parseInt(vehicleId));
-            setVehicle(filteredVehicle);
+            const vehicleId = order.vehicleId;
+            const response = await vehicleService.getVehicleByVehicleId(vehicleId);
+            setVehicle(response.data);
         } catch (error) {
             console.error("Error fetching vehicle:", error.message);
             setApiError(true);
@@ -94,18 +89,20 @@ function Order() {
     };
 
 
-
     const fetchServices = async () => {
         try {
-            const response = await serviceService.getAllServices(token);
-            if (response.status === 'success' && Array.isArray(response.data)) {
-                const servicesArray = serviceIdsArray.map(serviceId => {
-                    return response.data.find(service => service.service_id === parseInt(serviceId));
-                });
-                setServices(servicesArray);
-            } else {
-                setApiError('Unexpected response format. Please check the API response.');
-            }
+            const responses = await Promise.all(
+                serviceIdsArray.map((id) =>
+                    serviceService.getServiceById(id).catch((error) => {
+                        console.error(`Error fetching service ${id}:`, error);
+                        return null; // or some other default value
+                    })
+                )
+            );
+            
+            const allService=responses.map((response) => response.data);
+            setServices(allService);
+            console.log(services)
         } catch (error) {
             setApiError('Failed to fetch services. Please try again.');
             console.error('Error fetching services:', error);
@@ -180,8 +177,8 @@ function Order() {
                 <div className="auto-container">
                     <div className="sec-title style-two">
                         <div className="row mx-1 d-flex justify-content-between">
-                        <h2>{customer.customer_first_name} {customer.customer_last_name}</h2>
-                        <p className={getOrderStatusClassName(order.order_status)}>{getOrderStatus(order.order_status)}</p>
+                            <h2>{customer.customer_first_name} {customer.customer_last_name}</h2>
+                            <p className={getOrderStatusClassName(order.order_status)}>{getOrderStatus(order.orderStatus)}</p>
                         </div>
                         <div className="text">
                             Bring to the table win-win survival strategies to ensure proactive domination. At the end of the day,
@@ -202,7 +199,7 @@ function Order() {
                                 <h6>
                                     Phone number: <span className="fs">{customer.customer_phone_number}</span>
                                 </h6>
-                                
+
                             </div>
                         </div>
                         <div className="col-lg-6 service-block-one">
@@ -231,21 +228,17 @@ function Order() {
                                         <h5 className='px-3'>{service.service_name}</h5>
                                         <div className='d-flex justify-content-between'>
                                             <p className='col-10 '>{service.service_description}</p>
-                                            <div className="  ">
-                                                <p className={getOrderStatusClassName(order.order_status)}>{getOrderStatus(order.order_status)}</p>
-                                            </div>
+                                            
                                         </div>
                                     </div>
                                 ))}
                                 <div className='service-box mb-2'>
-                                        <h5 className='px-3'>Additional request</h5>
-                                        <div className='d-flex justify-content-between'>
-                                            <p className='col-10 '>{order.additional_request}</p>
-                                            <div className="  ">
-                                                <p className={getOrderStatusClassName(order.order_status)}>{getOrderStatus(order.order_status)}</p>
-                                            </div>
-                                        </div>
+                                    <h5 className='px-3'>Additional request</h5>
+                                    <div className='d-flex justify-content-between'>
+                                        <p className='col-10 '>{order.additionalRequest}</p>
+                                        
                                     </div>
+                                </div>
                             </div>
                         </div>
                     </div>

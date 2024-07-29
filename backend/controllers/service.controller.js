@@ -29,7 +29,9 @@ async function createService(req, res, next) {
 async function getServiceById(req, res, next) {
     try {
         const serviceId = req.params.id;
+        console.log("controller",serviceId)
         const service = await commonServiceService.getServiceById(serviceId);
+        console.log("controller",service)
         if (!service) {
             return res.status(404).json({
                 error: "Service not found!"

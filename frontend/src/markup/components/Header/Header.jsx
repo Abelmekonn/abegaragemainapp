@@ -7,9 +7,10 @@ import logo from '../../../assets/images/custom/logo.png';
 import { LogOut } from '../../../services/login.service';
 // Import the custom context hook 
 import { useAuth } from '../../../contexts/AuthContext';
-
+import { useNavigate } from 'react-router-dom';
 
 function Header(props) {
+    const navigate = useNavigate();
     // Use the custom hook to access the data in the context 
     const { isLogged, setIsLogged, employee, isAdmin } = useAuth();
     // console.log(useAuth());
@@ -20,7 +21,9 @@ function Header(props) {
         LogOut();
         // Set the isLogged state to false 
         setIsLogged(false);
+        navigate('/');
         window.location.reload();
+        
     }
 
     return (

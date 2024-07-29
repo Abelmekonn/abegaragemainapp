@@ -139,51 +139,65 @@ const getOrderByCustomerId = async (customerId) => {
     }
 
     try {
-        const query = `SELECT o.order_id, o.employee_id, o.customer_id, o.vehicle_id, o.active_order, o.order_hash,
-                      oi.order_total_price, oi.additional_request, oi.notes_for_internal_use, oi.notes_for_customer, oi.additional_requests_completed,
-                      os.service_id, os.service_completed,
-                      ost.order_status
-                     FROM orders o
-                     LEFT JOIN order_info oi ON o.order_id = oi.order_id
-                     LEFT JOIN order_services os ON o.order_id = os.order_id
-                     LEFT JOIN order_status ost ON o.order_id = ost.order_id
-                     WHERE o.customer_id = ?`;
+        const query = `
+            SELECT o.order_id, o.employee_id, o.customer_id, o.vehicle_id, o.active_order, o.order_hash,
+                   oi.order_total_price, oi.additional_request, oi.notes_for_internal_use, oi.notes_for_customer, oi.additional_requests_completed,
+                   GROUP_CONCAT(os.service_id ORDER BY os.service_id) AS service_ids,
+                   GROUP_CONCAT(os.order_service_id ORDER BY os.order_service_id) AS order_service_ids,
+                   GROUP_CONCAT(os.service_completed ORDER BY os.service_id) AS services_completed,
+                   ost.order_status
+            FROM orders o
+            LEFT JOIN order_info oi ON o.order_id = oi.order_id
+            LEFT JOIN order_services os ON o.order_id = os.order_id
+            LEFT JOIN order_status ost ON o.order_id = ost.order_id
+            WHERE o.customer_id = ?
+            GROUP BY o.order_id
+            ORDER BY o.order_id DESC;
+        `;
 
         const [results] = await conn.query(query, [customerId]);
 
-        console.log('Results:', results); // Log the result to understand its structure
-
         // Ensure results is an array
         const rows = Array.isArray(results) ? results : [results];
-
+        console.log(rows)
         if (rows.length === 0) {
             return []; // No orders found
         }
 
         // Process each row
-        return rows.map(row => ({
-            id: row.order_id,
-            employeeId: row.employee_id,
-            customerId: row.customer_id,
-            vehicleId: row.vehicle_id,
-            activeOrder: row.active_order,
-            orderHash: row.order_hash,
-            orderTotalPrice: row.order_total_price,
-            additionalRequest: row.additional_request,
-            notesForInternalUse: row.notes_for_internal_use,
-            notesForCustomer: row.notes_for_customer,
-            additionalRequestsCompleted: row.additional_requests_completed,
-            services: rows.filter(service => service.service_id === row.service_id).map(service => ({
-                serviceId: service.service_id,
-                serviceCompleted: service.service_completed,
-            })),
-            orderStatus: row.order_status,
-        }));
+        return rows.map(row => {
+            const serviceIds = row.service_ids ? row.service_ids.split(',') : [];
+            const orderServiceIds = row.order_service_ids ? row.order_service_ids.split(',') : [];
+            const servicesCompleted = row.services_completed ? row.services_completed.split(',') : [];
+
+            const services = serviceIds.map((serviceId, index) => ({
+                serviceId: serviceId,
+                orderServiceId: orderServiceIds[index],
+                serviceCompleted: servicesCompleted[index],
+            }));
+
+            return {
+                id: row.order_id,
+                employeeId: row.employee_id,
+                customerId: row.customer_id,
+                vehicleId: row.vehicle_id,
+                activeOrder: row.active_order,
+                orderHash: row.order_hash,
+                orderTotalPrice: row.order_total_price,
+                additionalRequest: row.additional_request,
+                notesForInternalUse: row.notes_for_internal_use,
+                notesForCustomer: row.notes_for_customer,
+                additionalRequestsCompleted: row.additional_requests_completed,
+                services: services,
+                orderStatus: row.order_status,
+            };
+        });
     } catch (error) {
         console.error('Error getting orders by customer ID:', error);
         throw new Error('Error getting orders by customer ID');
     }
 };
+
 
 
 

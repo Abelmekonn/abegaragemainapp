@@ -24,22 +24,21 @@ const createService = async (serviceData, token) => {
     }
 };
 
-const getServiceById = async (serviceId, token) => {
+const getServiceById = async (serviceId) => {
     const requestOptions = {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'x-access-token': token
         }
     };
 
     try {
         const response = await fetch(`${api_url}/api/service/${serviceId}`, requestOptions);
-
+        
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-
+        
         return response.json(); // Parse JSON response
     } catch (error) {
         console.error('Error in getServiceById:', error.message);

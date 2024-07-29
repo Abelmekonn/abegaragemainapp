@@ -36,12 +36,13 @@ const getVehicles = async (req, res, next) => {
   }
 };
 
-async function getVehicleByCustomerId(req, res, next) {
+async function getVehicleByVehicleId(req, res, next) {
     try {
-        const customerId = req.params.customerId;
-        console.log(customerId)
+        const VehicleId = req.params.vehicleId;
         
-        const vehicles = await vehicleService.getVehicleByCustomerId(customerId);
+        
+        const vehicles = await vehicleService.getVehicleByCustomerId(VehicleId);
+        
         if (!vehicles || vehicles.length === 0) {
             return res.status(404).json({
                 error: "No vehicles found for this customer!"
@@ -81,5 +82,5 @@ module.exports = {
     createVehicle,
     getVehicles,
     updateVehicle,
-    getVehicleByCustomerId
+    getVehicleByVehicleId
 };

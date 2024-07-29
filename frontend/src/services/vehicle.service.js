@@ -62,7 +62,7 @@ const updateVehicle = async (vehicleData, token) => {
     }
 };
 
-const getVehicleByCustomerId = async ( customerId) => {
+const getVehicleByVehicleId = async ( customerId) => {
     const requestOptions = {
         method: 'GET',
         headers: {
@@ -88,7 +88,7 @@ const vehicleService = {
     createVehicle,
     getVehicles,
     updateVehicle,
-    getVehicleByCustomerId // Added getVehicleByCustomerId to the exported service
+    getVehicleByVehicleId // Added getVehicleByCustomerId to the exported service
 };
 
 export default vehicleService;

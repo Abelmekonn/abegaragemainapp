@@ -23,15 +23,13 @@ async function createService(service) {
 
 // Function to get a service by ID
 async function getServiceById(service_id) {
+    console.log("service",service_id)
     try {
         const query = "SELECT * FROM common_services WHERE service_id = ?";
-        const rows = await conn.query(query, [service_id]);
+        const [rows] = await conn.query(query, [service_id]);
         
-        if (rows.length === 0) {
-            return null;
-        }
-        
-        return rows[0];
+        console.log("service row",rows)
+        return rows;
     } catch (err) {
         console.error('Error fetching service:', err);
         throw err;

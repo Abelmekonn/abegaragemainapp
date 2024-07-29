@@ -33,21 +33,14 @@ const getVehicles = async () => {
     }
 };
 
-const getVehicleByCustomerId = async (req, res) => {
-    const customerId = req.params.customerId;
-    console.log("servis id " ,customerId)
-    const query = `SELECT * FROM customer_vehicle_info WHERE customer_id = ? ORDER BY vehicle_id DESC`;
+const getVehicleByCustomerId = async (VehicleId) => {
+    const query = `SELECT * FROM customer_vehicle_info WHERE vehicle_id = ? ORDER BY vehicle_id DESC`;
 
     try {
-        console.log(`Executing query: ${query} with customerId: ${customerId}`);
-        const [rows] = await conn.query(query, [customerId]);
         
-
-        if (!rows || rows.length === 0) {
-            return res.status(404).json({ message: 'No vehicles found for this customer' });
-        }
-
-        return res.status(200).json(rows);
+        const [rows] = await conn.query(query, [VehicleId]);
+        
+        return rows; 
     } catch (error) {
         console.error('Error fetching vehicles:', error);
         return res.status(500).json({ message: 'Error fetching vehicles', error: error.message });
